@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import InputEquation from './InputEquation';
-import SelectOperatin from './SelectOperatin';
+import SelectOperatin from './SelectOperation';
 import Display from './Display';
 // import Tips from './Tips';
 import { calculateDerivative, calculateIntegral } from '@/app/utils/calculate';
@@ -21,6 +21,10 @@ const Calculator: React.FC = () => {
     setResultTex("")
     setError("")
   }, [displayTex]);
+
+  useEffect(() => {
+    setResultTex("")
+  }, [operation]);
 
   const handleTexChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputTex(event.target.value);

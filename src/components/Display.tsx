@@ -21,17 +21,23 @@ const displayHeader: React.CSSProperties = {
 };
 
 const Display: React.FC<DisplayProps> = ({displayTex, operation, wrt, resultTex, answerToggle}) => {
-    let dif = "";
+    let previewPrefix: string = "";
+    let answerSuffix: string = ""
+
     switch (operation) {
         case "derivative":
-            dif = `\\frac{d}{d${wrt}}`;
+            previewPrefix = `\\frac{d}{d${wrt}}`;
+            answerSuffix = `dx`;
             break;
         case "integral":
-            dif = "\\int";
+            previewPrefix = "\\int";
+            answerSuffix = ` + c`;
             break;
         default:
-            dif = "";
+            previewPrefix = "";
+            answerSuffix = "";
     }
+
     return (
     <div className="mt-1 pt-8 bg-[#00c4eb] text-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-shadow duration-300 hover:shadow-xl border border-gray-200 dark:border-gray-700">
       <div className="px-6 py-4">
@@ -57,10 +63,10 @@ const Display: React.FC<DisplayProps> = ({displayTex, operation, wrt, resultTex,
                     <h3>Answer</h3>
                 </motion.div>}
         </AnimatePresence>
-        <div className="overflow-x-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md">
+        <div className="overflow-x-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
             <div className="inline-flex items-center">
                 <span className="text-3xl mr-1">
-                    <Latex>{`$${dif}$`}</Latex>
+                    <Latex>{`$${previewPrefix}$`}</Latex>
                 </span>
                 <p className="text-3xl">&#40;</p>
                     <Latex>{`$${displayTex}$`}</Latex>
@@ -78,6 +84,7 @@ const Display: React.FC<DisplayProps> = ({displayTex, operation, wrt, resultTex,
                     exit={{ opacity: 0, scale: 0 }}
                     className="w-full mt-2">
                         <Latex>{`$=${resultTex}$`}</Latex>
+                        <Latex>{`$${answerSuffix}$`}</Latex>
                     </motion.div>}
             </AnimatePresence>
         </div>

@@ -1,4 +1,4 @@
-const BACKEND_URL: string = process.env.BACKEND_URL || "http://localhost:3001";
+const BACKEND_URL: string = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
 
 export const calculateDerivative = async (expression: string, variable: string) => {
     const res = await fetch(BACKEND_URL+"/derivative", {
