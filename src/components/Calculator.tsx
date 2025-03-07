@@ -1,37 +1,39 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InputEquation from './InputEquation';
 import SelectOperatin from './SelectOperatin';
-import Preview from './Preview';
-import Tips from './Tips';
-import Answer from './Answer';
+import Display from './Display';
+// import Tips from './Tips';
 import { calculateDerivative, calculateIntegral } from '@/app/utils/calculate';
 import { useLatexValidation } from '@/app/utils/hooks/useLatexValidation';
 
 const Calculator: React.FC = () => {
-  const [operation, setOperation] = useState<string>("");
+  const [operation, setOperation] = useState<string>("derivative");
   const [inputTex, setInputTex] = useState<string>("");
-  const [wrt, setWrt] = useState("");
+  const [wrt, setWrt] = useState("x");
   const {displayTex, latexError} = useLatexValidation(inputTex);
   const [resultTex, setResultTex] = useState<string>("");
   const [error, setError] = useState<string>(latexError);
+  const [answerToggle, setAnswerToggle] = useState(false);
+
+  useEffect(() => {
+    setAnswerToggle(false);
+    setResultTex("")
+    setError("")
+  }, [displayTex]);
 
   const handleTexChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputTex(event.target.value);
   };
 
-  const handleOperationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setOperation(event.target.value);
-    setError('');
-  };
-
   const handleWrtChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setWrt(event.target.value);
-    setError('');
+    setError("");
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setAnswerToggle(true);
 
     if (!inputTex || !operation || !wrt) {
       setError("All fields are required");
@@ -41,37 +43,37 @@ const Calculator: React.FC = () => {
 
     switch (operation) {
       case "derivative":
-        console.log(inputTex, wrt);
         const derivative = await calculateDerivative(inputTex, wrt);
-        console.log(JSON.parse(derivative.result));
         setResultTex(JSON.parse(derivative.result).result);
         break;
       case "integral":
         const integral = await calculateIntegral(inputTex, wrt);
-        console.log(JSON.parse(integral.result).result);
         setResultTex(JSON.parse(integral.result).result);
         break;
       default:
         console.error("Invalid operation");
     }
+
+    console.log(answerToggle);
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Calculus Calculator</h1>
-      <form className="mb-4" onSubmit={handleSubmit}>
-        <SelectOperatin handleOperationChange={handleOperationChange} handleWrtChange={handleWrtChange} />
-        <InputEquation inputTex={inputTex} handleTexChange={handleTexChange} error={error} />
-        <button
-          type='submit'
-          className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-end mt-4'
-        >
-          Calculate
-        </button>
-      </form>
-      <Preview operation={operation} wrt={wrt} displayTex={displayTex} />
-      {resultTex !== "" && <Answer resultTex={resultTex} />}
-      <Tips />
+    <div className="flex flex-col items-center w-fit sm:w-full mx-auto ">
+      <h1 className="text-4xl font-bold mb-4 mt-8">Calculus Calculator</h1>
+      <div className="mb-4 w-full sm:w-fit ml-4">
+        <SelectOperatin setOperation={setOperation}/>
+        <Display operation={operation} wrt={wrt} displayTex={displayTex} answerToggle={answerToggle} resultTex={resultTex}/>
+        <InputEquation inputTex={inputTex} error={error} handleTexChange={handleTexChange} handleWrtChange={handleWrtChange}/>
+        <form onSubmit={handleSubmit} className="w-full">
+          <button
+            type="submit"
+            className="w-full bg-white-mode-light-blue hover:bg-white-mode-blue text-white font-bold py-2 px-4 rounded float-end mt-4 dark:bg-blue-500 dark:hover:bg-blue-700"
+          >
+            Calculate
+          </button>
+        </form>
+      </div>
+      {/* <Tips /> */}
     </div>
   );
 };

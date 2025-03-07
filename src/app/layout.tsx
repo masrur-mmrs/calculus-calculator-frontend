@@ -30,6 +30,7 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css"
           rel="stylesheet"
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/> 
       </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
