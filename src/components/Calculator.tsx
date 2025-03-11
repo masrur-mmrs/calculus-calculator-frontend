@@ -48,11 +48,11 @@ const Calculator: React.FC = () => {
     switch (operation) {
       case "derivative":
         const derivative = await calculateDerivative(inputTex, wrt);
-        setResultTex(JSON.parse(derivative.result).result);
+        setResultTex(derivative.result);
         break;
       case "integral":
         const integral = await calculateIntegral(inputTex, wrt);
-        setResultTex(JSON.parse(integral.result).result);
+        setResultTex(integral.result);
         break;
       default:
         console.error("Invalid operation");
