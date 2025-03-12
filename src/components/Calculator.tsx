@@ -10,11 +10,11 @@ import { useLatexValidation } from '@/app/utils/hooks/useLatexValidation';
 const Calculator: React.FC = () => {
   const [operation, setOperation] = useState<string>("derivative");
   const [inputTex, setInputTex] = useState<string>("");
-  const [wrt, setWrt] = useState("x");
-  const {displayTex, latexError} = useLatexValidation(inputTex);
+  const [wrt, setWrt] = useState<string>("x");
   const [resultTex, setResultTex] = useState<string>("");
+  const {displayTex, latexError} = useLatexValidation(inputTex);
   const [error, setError] = useState<string>(latexError);
-  const [answerToggle, setAnswerToggle] = useState(false);
+  const [answerToggle, setAnswerToggle] = useState<boolean>(false);
 
   useEffect(() => {
     setAnswerToggle(false);
@@ -24,6 +24,7 @@ const Calculator: React.FC = () => {
 
   useEffect(() => {
     setResultTex("")
+    setAnswerToggle(false);
   }, [operation]);
 
   const handleTexChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {

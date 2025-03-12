@@ -1,7 +1,8 @@
-import { AnimatePresence } from "motion/react"
-import * as motion from "motion/react-client"
+import { AnimatePresence } from "motion/react";
+import * as motion from "motion/react-client";
 import React from 'react';
 import Latex from 'react-latex';
+import Loader from "./Loader";
 
 interface DisplayProps {
     displayTex: string;
@@ -76,6 +77,7 @@ const Display: React.FC<DisplayProps> = ({displayTex, operation, wrt, resultTex,
                     <Latex>{`$d${wrt}$`}</Latex>
                 </span>}
             </div>
+            {answerToggle && resultTex === "" && <Loader/>}
             <AnimatePresence initial={false}>
                 {resultTex !== "" &&
                     <motion.div
