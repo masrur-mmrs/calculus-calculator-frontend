@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.6.1",
     "clsx": "^2.1.1",
     "katex": "^0.16.21",
     "lucide-react": "^0.477.0",
@@ -19,6 +20,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-latex": "^2.0.0",
+    "react-redux": "^9.2.0",
     "styled-components": "^6.1.15",
     "tailwind-merge": "^3.0.2"
   },

@@ -3,6 +3,7 @@ import * as motion from "motion/react-client";
 import React from 'react';
 import Latex from 'react-latex';
 import Loader from "./Loader";
+// import { BlinkingCursor } from "./InputComponents/BlinkingCursor";
 
 interface DisplayProps {
     displayTex: string;
@@ -40,7 +41,7 @@ const Display: React.FC<DisplayProps> = ({displayTex, operation, wrt, resultTex,
     }
 
     return (
-    <div className="mt-1 pt-8 bg-[#00c4eb] text-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-shadow duration-300 hover:shadow-xl border border-gray-200 dark:border-gray-700">
+    <div className="pt-8 bg-[#00c4eb] text-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-shadow duration-300 hover:shadow-xl border border-gray-200 dark:border-gray-700">
       <div className="px-6 py-4">
         <AnimatePresence initial={true}>
             {!answerToggle &&
@@ -65,13 +66,15 @@ const Display: React.FC<DisplayProps> = ({displayTex, operation, wrt, resultTex,
                 </motion.div>}
         </AnimatePresence>
         <div className="overflow-x-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
-            <div className="inline-flex items-center">
+            <div className="inline-flex items-center gap-0.5">
                 <span className="text-3xl mr-1">
                     <Latex>{`$${previewPrefix}$`}</Latex>
                 </span>
-                <p className="text-3xl">&#40;</p>
+                <p className="text-3xl pb-1">&#40;</p>
                     <Latex>{`$${displayTex}$`}</Latex>
-                <p className="text-3xl">&#41;</p>
+                    {/* <p>|</p> */}
+                    {/* <BlinkingCursor/> */}
+                <p className="text-3xl pb-1">&#41;</p>
                 {operation==="integral" &&
                 <span className="text-3xl mr-1">
                     <Latex>{`$d${wrt}$`}</Latex>

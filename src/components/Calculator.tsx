@@ -3,13 +3,19 @@ import React, { useState, useEffect } from 'react';
 import InputEquation from './InputEquation';
 import SelectOperatin from './SelectOperation';
 import Display from './Display';
-// import Tips from './Tips';
+import Keyboard from './Keyboard/Keyboard';
 import { calculateDerivative, calculateIntegral } from '@/app/utils/calculate';
 import { useLatexValidation } from '@/app/utils/hooks/useLatexValidation';
 
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../redux/store";
+import { setInputTex } from "../redux/inputTexSlice";
+
 const Calculator: React.FC = () => {
+  const inputTex = useSelector((state: RootState) => state.inputTex.value);
+  const index = useSelector((state: RootState) => state.index.currentIndex);
+  const dispatch = useDispatch<AppDispatch>();
   const [operation, setOperation] = useState<string>("derivative");
-  const [inputTex, setInputTex] = useState<string>("");
   const [wrt, setWrt] = useState<string>("x");
   const [resultTex, setResultTex] = useState<string>("");
   const {displayTex, latexError} = useLatexValidation(inputTex);
@@ -27,8 +33,14 @@ const Calculator: React.FC = () => {
     setAnswerToggle(false);
   }, [operation]);
 
+  useEffect(() => {
+    const cleanedInputTex = inputTex.replace("|", "");
+    const newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index);
+    dispatch(setInputTex(newInputTex));
+  }, [index]);
+
   const handleTexChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputTex(event.target.value);
+    dispatch(setInputTex(event.target.value));
   };
 
   const handleWrtChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -46,13 +58,14 @@ const Calculator: React.FC = () => {
       return;
     }
 
+    const eqn = inputTex.replace("|", "");
     switch (operation) {
       case "derivative":
-        const derivative = await calculateDerivative(inputTex, wrt);
+        const derivative = await calculateDerivative(eqn, wrt);
         setResultTex(derivative.result);
         break;
       case "integral":
-        const integral = await calculateIntegral(inputTex, wrt);
+        const integral = await calculateIntegral(eqn, wrt);
         setResultTex(integral.result);
         break;
       default:
@@ -64,21 +77,21 @@ const Calculator: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-fit sm:w-full mx-auto ">
-      <h1 className="text-4xl font-bold mb-4 mt-8">Calculus Calculator</h1>
+      {/* <h1 className="text-4xl font-bold mt-1.5">Calculus Calculator</h1> */}
       <div className="mb-4 w-full sm:w-fit ml-4">
         <SelectOperatin setOperation={setOperation}/>
         <Display operation={operation} wrt={wrt} displayTex={displayTex} answerToggle={answerToggle} resultTex={resultTex}/>
-        <InputEquation inputTex={inputTex} error={error} handleTexChange={handleTexChange} handleWrtChange={handleWrtChange}/>
+        <Keyboard/>
         <form onSubmit={handleSubmit} className="w-full">
           <button
             type="submit"
-            className="w-full bg-white-mode-light-blue hover:bg-white-mode-blue text-white font-bold py-2 px-4 rounded float-end mt-4 dark:bg-blue-500 dark:hover:bg-blue-700"
+            className="w-full text-2xl bg-white-mode-light-blue hover:bg-white-mode-blue text-white font-bold py-2 px-4 rounded float-end my-4 dark:bg-blue-500 dark:hover:bg-blue-700"
           >
             Calculate
           </button>
         </form>
+        <InputEquation inputTex={inputTex} error={error} handleTexChange={handleTexChange} handleWrtChange={handleWrtChange}/>
       </div>
-      {/* <Tips /> */}
     </div>
   );
 };

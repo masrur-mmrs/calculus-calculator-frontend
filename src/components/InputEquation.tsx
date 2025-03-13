@@ -7,18 +7,20 @@ interface InputEquationProps {
     handleTexChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
+const visible = process.env.NODE_ENV === "development"
+
 const InputEquation: React.FC<InputEquationProps> = ({inputTex, error, handleTexChange, handleWrtChange}) => {
     return (
       <>
         <div className="flex flex-row w-full m-1 justify-between mt-5 mx-2">
-            <textarea
+            {visible && <textarea
                 id="latex-input"
                 value={inputTex}
                 onChange={handleTexChange}
                 rows={1}
                 className="w-full p-4 border-2 border-white-mode-blue dark:border-muted-teal rounded-2xl font-mono text-md outline-none text-center align-middle"
                 placeholder="Enter LaTeX formula"
-            />
+            />}
             <div className="flex flex-col ml-2 border-2 border-white-mode-blue dark:border-muted-teal rounded-xl mr-2">
                 <label htmlFor="wrt" className="block text-sm font-bold m-1.5 border-b-2 border-white-mode-blue dark:border-muted-teal">
                     WRT
@@ -31,6 +33,7 @@ const InputEquation: React.FC<InputEquationProps> = ({inputTex, error, handleTex
                     <option value="x" defaultChecked>x</option>
                     <option value="y">y</option>
                     <option value="z">z</option>
+                    <option value="θ">θ</option>
                 </select>
             </div>
         </div>
