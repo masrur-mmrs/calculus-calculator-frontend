@@ -1,6 +1,6 @@
 import React from 'react';
 import KeyboardButton from './KeyboardButton';
-import ArrowKeys from './NavKeys';
+import ArrowKeys from './NavigationKeys';
 
 const Keyboard: React.FC = ({}) => {
     return (
@@ -28,10 +28,15 @@ const Keyboard: React.FC = ({}) => {
             <KeyboardButton specieal>z</KeyboardButton>
             <KeyboardButton specieal>θ</KeyboardButton>
             <KeyboardButton specieal>{"e^{x}"}</KeyboardButton>
-            <KeyboardButton specieal>{"x^{\\boxed{}}"}</KeyboardButton>
-            <KeyboardButton specieal>{"\\sqrt{}"}</KeyboardButton>
-            <KeyboardButton specieal>{"\\ln(~\\boxed{}~)"}</KeyboardButton>
-            <KeyboardButton specieal>{"\\log{(~\\boxed{}~})"}</KeyboardButton>
+            <KeyboardButton specieal>{"x^{2}"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\boxed{~}^{\\boxed{}}"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\boxed{~}^{-1}"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\sqrt{~}"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\ln(~\\boxed{~}~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\log{(~\\boxed{~}~})"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\sin(~\\boxed{~}~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\cos(~\\boxed{~}~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\tan(~\\boxed{~}~)"}</KeyboardButton>
             </div>
         </>
     );

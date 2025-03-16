@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import InputEquation from './InputEquation';
+import InputEquation from './Options';
 import SelectOperatin from './SelectOperation';
 import Display from './Display';
 import Keyboard from './Keyboard/Keyboard';
@@ -38,10 +38,6 @@ const Calculator: React.FC = () => {
     const newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index);
     dispatch(setInputTex(newInputTex));
   }, [index]);
-
-  const handleTexChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(setInputTex(event.target.value));
-  };
 
   const handleWrtChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setWrt(event.target.value);
@@ -90,7 +86,7 @@ const Calculator: React.FC = () => {
             Calculate
           </button>
         </form>
-        <InputEquation inputTex={inputTex} error={error} handleTexChange={handleTexChange} handleWrtChange={handleWrtChange}/>
+        <InputEquation error={error} handleWrtChange={handleWrtChange}/>
       </div>
     </div>
   );

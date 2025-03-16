@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { cn } from "@/app/lib/utils"
+import { cn } from "@/app/utils/helpers"
 
 interface SelectOperatinProps {
     setOperation: (operation: string) => void;

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { insertTex, setInputTex } from "../../redux/inputTexSlice";
 import { setCurrentIndex, incrementIndex } from '@/redux/indexSlice';
-import { cn } from '@/app/lib/utils';
+import { cn } from '@/app/utils/helpers';
 
 interface KeyboardButtonProps {
     children: React.ReactNode;
@@ -34,7 +34,7 @@ const KeyboardButton: React.FC<KeyboardButtonProps> = ({ children, specieal = fa
                 dispatch(insertTex({index: index, tex: "\\frac{~}{}"}));
                 dispatch(incrementIndex(7));
                 break;
-            case "x^{\\boxed{}}":
+            case "\\boxed{~}^{\\boxed{}}":
                 const boxedRegex = /[0-9exyzθπ]+/g;
                 const boxedMatches = inputTex.slice(0, index).match(boxedRegex);
                 if (boxedMatches) {
@@ -43,27 +43,51 @@ const KeyboardButton: React.FC<KeyboardButtonProps> = ({ children, specieal = fa
                     if (lastMatchIndex + lastMatch.length === index) {
                         const newTex = inputTex.slice(0, lastMatchIndex) + inputTex.slice(lastMatchIndex + lastMatch.length);
                         dispatch(setInputTex(newTex));
-                        console.log("Last matched index: ", lastMatchIndex);
                         dispatch(insertTex({index: lastMatchIndex, tex: `${lastMatch}^{}`}));
                         dispatch(setCurrentIndex(lastMatchIndex + `${lastMatch}^{`.length));
                         break;
                     }
                 }
-                // dispatch(insertTex({index: index, tex: "\\boxed{}^{\\boxed{}}"}));
-                // dispatch(incrementIndex(7));
                 break;
-            case "\\sqrt{}":
+            case "\\boxed{~}^{-1}":
+                const boxedInverseRegex = /[0-9exyzθπ]+/g;
+                const boxedInverseMatches = inputTex.slice(0, index).match(boxedInverseRegex);
+                if (boxedInverseMatches) {
+                    const lastMatch = boxedInverseMatches[boxedInverseMatches.length - 1];
+                    const lastMatchIndex = inputTex.lastIndexOf(lastMatch);
+                    if (lastMatchIndex + lastMatch.length === index) {
+                        const newTex = inputTex.slice(0, lastMatchIndex) + inputTex.slice(lastMatchIndex + lastMatch.length);
+                        dispatch(setInputTex(newTex));
+                        dispatch(insertTex({index: lastMatchIndex, tex: `${lastMatch}^{-1}`}));
+                        dispatch(setCurrentIndex(lastMatchIndex + `${lastMatch}^{-1}`.length));
+                        break;
+                    }
+                }
+                break;
+            case "\\sqrt{~}":
                 dispatch(insertTex({index: index, tex: "\\sqrt{}"}));
                 dispatch(incrementIndex(6))
                 break;
-            case "\\ln(~\\boxed{}~)":
+            case "\\ln(~\\boxed{~}~)":
                 dispatch(insertTex({index: index, tex: "\\ln()"}));
                 dispatch(incrementIndex(4));
                 break;
-            case "\\log{(~\\boxed{}~})":
-                dispatch(insertTex({index: index, tex: "\\log_{10}()"}));
-                dispatch(incrementIndex(10));
+            case "\\log{(~\\boxed{~}~})":
+                dispatch(insertTex({index: index, tex: "\\log()"}));
+                dispatch(incrementIndex(5));
                 break;
+            case "\\sin(~\\boxed{~}~)":
+                dispatch(insertTex({index: index, tex: "\\sin()"}));
+                dispatch(incrementIndex(5));
+                break;
+            case "\\cos(~\\boxed{~}~)":
+                dispatch(insertTex({index: index, tex: "\\cos()"}));
+                dispatch(incrementIndex(5));
+                break;
+            case "\\tan(~\\boxed{~}~)":
+                dispatch(insertTex({index: index, tex: "\\tan()"}));
+                dispatch(incrementIndex(5));
+                break; 
             default:
                 dispatch(insertTex({index: index, tex: children!.toString()}));
                 dispatch(incrementIndex(children!.toString().length));
@@ -72,7 +96,7 @@ const KeyboardButton: React.FC<KeyboardButtonProps> = ({ children, specieal = fa
 
     return (
         <button 
-            className={cn("px-4 py-2.5 rounded-lg active:scale-95 transform ease-in-out duration-150", specieal ? "text-white font-semibold bg-white-mode-blue dark:bg-blue-700": "font-mono border-2 border-white-mode-blue dark:border-muted-teal")}
+            className={cn("px-4 py-2.5 rounded-lg active:scale-95 transform ease-in-out duration-150", specieal ? "text-white font-semibold bg-white-mode-blue dark:bg-blue-700 text-lg": "font-mono border-2 border-white-mode-blue dark:border-muted-teal")}
             onClick={handleOnClick}
         >
             <Latex>{`$${children}$`}</Latex>
