@@ -75,7 +75,6 @@ const Calculator: React.FC = () => {
     <div className="flex flex-col items-center w-fit sm:w-full mx-auto ">
       {/* <h1 className="text-4xl font-bold mt-1.5">Calculus Calculator</h1> */}
       <div className="mb-4 w-full sm:w-fit ml-4">
-        <p>{inputTex}</p>
         <SelectOperatin setOperation={setOperation}/>
         <Display operation={operation} wrt={wrt} displayTex={displayTex} answerToggle={answerToggle} resultTex={resultTex}/>
         <Keyboard/>
