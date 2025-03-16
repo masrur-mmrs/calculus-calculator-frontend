@@ -49,14 +49,14 @@ export const handlePrev = (inputTex: string, index: number, dispatch: AppDispatc
     if (inputTex.substring(index - 8, index) === "~\\times~") {
         dispatch(decrementIndex(7))
     }
+    if (inputTex.substring(index - 6, index) === "\\frac{") {
+        dispatch(decrementIndex(4))
+    }
     if (inputTex.substring(index - 6, index) === "\\sqrt{") {
         dispatch(decrementIndex(4))
     }
     if (inputTex.substring(index - 4, index) === "\\ln(") {
         dispatch(decrementIndex(3))
-    }
-    if (inputTex.substring(index - 2, index) === "{~") {
-        dispatch(decrementIndex(6))
     }
     if (inputTex.substring(index - 1, index) === "{") {
         dispatch(decrementIndex(1))

@@ -26,13 +26,13 @@ const KeyboardButton: React.FC<KeyboardButtonProps> = ({ children, specieal = fa
                     if (lastMatchIndex + lastMatch.length === index) {
                         const newTex = inputTex.slice(0, lastMatchIndex) + inputTex.slice(lastMatchIndex + lastMatch.length);
                         dispatch(setInputTex(newTex));
-                        dispatch(insertTex({index: lastMatchIndex, tex: `\\frac{~${lastMatch}}{}`}));
-                        dispatch(setCurrentIndex(lastMatchIndex + `\\frac{~${lastMatch}`.length));
+                        dispatch(insertTex({index: lastMatchIndex, tex: `\\frac{${lastMatch}}{}`}));
+                        dispatch(setCurrentIndex(lastMatchIndex + `\\frac{${lastMatch}}{`.length));
                         break;
                     }
                 }
-                dispatch(insertTex({index: index, tex: "\\frac{~}{}"}));
-                dispatch(incrementIndex(7));
+                dispatch(insertTex({index: index, tex: "\\frac{}{}"}));
+                dispatch(incrementIndex(6));
                 break;
             case "\\boxed{~}^{\\boxed{}}":
                 const boxedRegex = /[0-9exyzθπ]+/g;
