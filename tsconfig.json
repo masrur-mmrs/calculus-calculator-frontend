@@ -35,7 +35,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next.config.js"
-  ],
+, "src/components/InputComponents/Test.tsx"  ],
   "exclude": [
     "node_modules"
   ]

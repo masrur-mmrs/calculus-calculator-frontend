@@ -6,6 +6,7 @@ import Display from './Display';
 import Keyboard from './Keyboard/Keyboard';
 import { calculateDerivative, calculateIntegral } from '@/app/utils/calculate';
 import { useLatexValidation } from '@/app/utils/hooks/useLatexValidation';
+// import LatexWithCursor from './InputComponents/LatexWithCursor';
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
@@ -54,13 +55,14 @@ const Calculator: React.FC = () => {
       return;
     }
 
-    const eqn = inputTex.replace("|", "");
+    const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi");
     switch (operation) {
       case "derivative":
         const derivative = await calculateDerivative(eqn, wrt);
         setResultTex(derivative.result);
         break;
       case "integral":
+        console.log(eqn)
         const integral = await calculateIntegral(eqn, wrt);
         setResultTex(integral.result);
         break;
@@ -77,6 +79,7 @@ const Calculator: React.FC = () => {
       <div className="mb-4 w-full sm:w-fit ml-4">
         <SelectOperatin setOperation={setOperation}/>
         <Display operation={operation} wrt={wrt} displayTex={displayTex} answerToggle={answerToggle} resultTex={resultTex}/>
+        {/* <LatexWithCursor displayTex={displayTex}/> */}
         <Keyboard/>
         <form onSubmit={handleSubmit} className="w-full">
           <button
