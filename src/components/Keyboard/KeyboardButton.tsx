@@ -109,7 +109,7 @@ const KeyboardButton: React.FC<KeyboardButtonProps> = ({ children, specieal = fa
 
     return (
         <button 
-            className={cn("px-4 py-2.5 rounded-lg active:scale-95 hover:scale-105 transform ease-in-out duration-150", specieal ? "text-white font-semibold bg-white-mode-blue dark:bg-blue-700 text-lg": "font-mono border-2 border-white-mode-blue dark:border-muted-teal")}
+            className={cn("px-4 py-2.5 rounded-lg active:scale-95 sm:hover:scale-105 transform ease-in-out duration-150", specieal ? "text-white font-semibold bg-white-mode-blue dark:bg-blue-700 text-lg": "font-mono border-2 border-white-mode-blue dark:border-muted-teal")}
             onClick={handleOnClick}
         >
             <Latex>{`$${children}$`}</Latex>
