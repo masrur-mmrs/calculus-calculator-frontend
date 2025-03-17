@@ -3,10 +3,9 @@ import * as motion from "motion/react-client";
 import React from 'react';
 import Latex from 'react-latex';
 import Loader from "./Loader";
-// import { BlinkingCursor } from "./InputComponents/BlinkingCursor";
-
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 interface DisplayProps {
-    displayTex: string;
     operation: string;
     wrt: string;
     resultTex: string;
@@ -22,7 +21,9 @@ const displayHeader: React.CSSProperties = {
     translate: '0rem -2.5rem'
 };
 
-const Display: React.FC<DisplayProps> = ({displayTex, operation, wrt, resultTex, answerToggle}) => {
+const Display: React.FC<DisplayProps> = ({operation, wrt, resultTex, answerToggle}) => {
+    const displayTex = useSelector((state: RootState) => state.inputTex.value)
+    
     let previewPrefix: string = "";
     let answerSuffix: string = ""
 
@@ -65,15 +66,13 @@ const Display: React.FC<DisplayProps> = ({displayTex, operation, wrt, resultTex,
                     <h3>Answer</h3>
                 </motion.div>}
         </AnimatePresence>
-        <div className="overflow-x-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
+        <div className="overflow-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
             <div className="inline-flex items-center gap-0.5">
                 <span className="text-3xl mr-1">
                     <Latex>{`$${previewPrefix}$`}</Latex>
                 </span>
                 <p className="text-3xl pb-1">&#40;</p>
-                    <Latex>{`$${displayTex}$`}</Latex>
-                    {/* <p>|</p> */}
-                    {/* <BlinkingCursor/> */}
+                    <Latex displayMode>{`$${displayTex}$`}</Latex>
                 <p className="text-3xl pb-1">&#41;</p>
                 {operation==="integral" &&
                 <span className="text-3xl mr-1">

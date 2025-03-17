@@ -5,8 +5,6 @@ import SelectOperatin from './SelectOperation';
 import Display from './Display';
 import Keyboard from './Keyboard/Keyboard';
 import { calculateDerivative, calculateIntegral } from '@/app/utils/calculate';
-import { useLatexValidation } from '@/app/utils/hooks/useLatexValidation';
-// import LatexWithCursor from './InputComponents/LatexWithCursor';
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
@@ -19,15 +17,12 @@ const Calculator: React.FC = () => {
   const [operation, setOperation] = useState<string>("derivative");
   const [wrt, setWrt] = useState<string>("x");
   const [resultTex, setResultTex] = useState<string>("");
-  const {displayTex, latexError} = useLatexValidation(inputTex);
-  const [error, setError] = useState<string>(latexError);
   const [answerToggle, setAnswerToggle] = useState<boolean>(false);
 
   useEffect(() => {
     setAnswerToggle(false);
     setResultTex("")
-    setError("")
-  }, [displayTex]);
+  }, [inputTex]);
 
   useEffect(() => {
     setResultTex("")
@@ -42,7 +37,6 @@ const Calculator: React.FC = () => {
 
   const handleWrtChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setWrt(event.target.value);
-    setError("");
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -50,7 +44,7 @@ const Calculator: React.FC = () => {
     setAnswerToggle(true);
 
     if (!inputTex || !operation || !wrt) {
-      setError("All fields are required");
+      window.alert("Input missing")
       console.error("Invalid input");
       return;
     }
@@ -76,10 +70,10 @@ const Calculator: React.FC = () => {
   return (
     <div className="flex flex-col items-center w-fit sm:w-full mx-auto ">
       {/* <h1 className="text-4xl font-bold mt-1.5">Calculus Calculator</h1> */}
+        {/* <LatexWithCursor displayTex={displayTex}/> */}
       <div className="mb-4 w-full sm:w-fit ml-4">
         <SelectOperatin setOperation={setOperation}/>
-        <Display operation={operation} wrt={wrt} displayTex={displayTex} answerToggle={answerToggle} resultTex={resultTex}/>
-        {/* <LatexWithCursor displayTex={displayTex}/> */}
+        <Display operation={operation} wrt={wrt} answerToggle={answerToggle} resultTex={resultTex}/>
         <Keyboard/>
         <form onSubmit={handleSubmit} className="w-full">
           <button
@@ -89,7 +83,7 @@ const Calculator: React.FC = () => {
             Calculate
           </button>
         </form>
-        <InputEquation error={error} handleWrtChange={handleWrtChange}/>
+        <InputEquation handleWrtChange={handleWrtChange}/>
       </div>
     </div>
   );

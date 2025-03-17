@@ -1,11 +1,10 @@
 import React from 'react';
 
 interface OptionsProps {
-    error: string;
     handleWrtChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const Options: React.FC<OptionsProps> = ({ error, handleWrtChange}) => {
+const Options: React.FC<OptionsProps> = ({ handleWrtChange}) => {
     return (
       <>
         <div className="flex flex-row w-full m-1 justify-center mt-5 mx-2">
@@ -25,7 +24,6 @@ const Options: React.FC<OptionsProps> = ({ error, handleWrtChange}) => {
                 </select>
             </div>
         </div>
-        {error && <p className="text-red-500 mt-1">{error}</p>}
       </>
     );
 };

@@ -84,7 +84,7 @@ export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDi
     if (inputTex.substring(index - 8, index) === "~\\times~") {
         const newTex = inputTex.substring(0, index - 8) + inputTex.substring(index);
         dispatch(setInputTex(newTex));
-        dispatch(decrementIndex(7));
+        dispatch(decrementIndex(8));
         dispatch(decrementCursorIndex(1));
         return;
     }
