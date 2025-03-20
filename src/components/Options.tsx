@@ -20,7 +20,7 @@ const Options: React.FC<OptionsProps> = ({ handleWrtChange}) => {
                     <option value="x" defaultChecked>x</option>
                     <option value="y">y</option>
                     <option value="z">z</option>
-                    <option value="θ">θ</option>
+                    <option value="\theta">θ</option>
                 </select>
             </div>
         </div>

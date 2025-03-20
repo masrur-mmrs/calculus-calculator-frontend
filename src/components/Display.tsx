@@ -10,7 +10,7 @@ interface DisplayProps {
     wrt: string;
     resultTex: string;
     answerToggle: boolean;
-}
+};
 
 const displayHeader: React.CSSProperties = {
     fontSize: '1.125rem',
@@ -30,7 +30,7 @@ const Display: React.FC<DisplayProps> = ({operation, wrt, resultTex, answerToggl
     switch (operation) {
         case "derivative":
             previewPrefix = `\\frac{d}{d${wrt}}`;
-            answerSuffix = `dx`;
+            answerSuffix = `d${wrt}`;
             break;
         case "integral":
             previewPrefix = "\\int";

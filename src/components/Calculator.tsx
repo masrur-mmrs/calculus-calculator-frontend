@@ -49,7 +49,7 @@ const Calculator: React.FC = () => {
       return;
     }
 
-    const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi");
+    const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi").replaceAll("θ", "\\theta");
     switch (operation) {
       case "derivative":
         const derivative = await calculateDerivative(eqn, wrt);
