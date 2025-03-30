@@ -1,13 +1,19 @@
-import { configureStore } from "@reduxjs/toolkit";
-import inputTexReducer from "./inputTexSlice";
-import indexSlice from "./indexSlice"
-import cursorSlice from "./cursorSlice"
+import { configureStore } from "@reduxjs/toolkit"
+import inputTexReducer from "./slices/inputTexSlice"
+import indexSlice from "./slices/indexSlice"
+import cursorSlice from "./slices/cursorSlice"
+import resultTexSlice from "./slices/resultTexSlice"
+import wrtSlice from "./slices/wrtSlice"
+import oodSlice from "./slices/oodSlice"
 
 export const store = configureStore({
     reducer: { 
         inputTex: inputTexReducer,
         index: indexSlice,
-        cursor: cursorSlice
+        cursor: cursorSlice,
+        resultTex: resultTexSlice,
+        wrt: wrtSlice,
+        ood: oodSlice,
      },
 });
 

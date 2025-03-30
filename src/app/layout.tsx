@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Head from "next/head";
 import { Geist, Geist_Mono } from "next/font/google";
 import ReduxProvider from "../redux/provider";
+import { AnswerToggleProvider } from "@/context/context";
+import Mode from "@/components/Mode"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,7 +36,14 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/> 
       </Head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <AnswerToggleProvider>
+          <div className="relative">
+            <Mode/>
+            {children}
+          </div>
+          </AnswerToggleProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

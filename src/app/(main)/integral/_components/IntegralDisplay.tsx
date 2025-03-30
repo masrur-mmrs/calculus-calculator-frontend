@@ -1,10 +1,9 @@
 'use client'
 import React from 'react';
-import { usePathname } from "next/navigation";
 import { AnimatePresence } from "motion/react";
 import * as motion from "motion/react-client";
 import Latex from 'react-latex';
-import Loader from "./Loader";
+import Loader from '@/components/Loader';
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useAnswerToggleContext } from '@/context/context';
@@ -18,30 +17,15 @@ const displayHeader: React.CSSProperties = {
     translate: '0rem -2.5rem'
 };
 
-const Display: React.FC = () => {
+const IntegralDisplay: React.FC = () => {
     const { answerToggle } = useAnswerToggleContext();
     const displayTex = useSelector((state: RootState) => state.inputTex.value);
     const resultTex = useSelector((state: RootState) => state.resultTex.value);
     const wrt = useSelector((state: RootState) => state.wrt.value);
-    const ood = useSelector((state: RootState) => state.ood.value);
-    const operation = usePathname().split("/").pop();
+    // const ood = useSelector((state: RootState) => state.ood.value);
     
-    let previewPrefix: string = "";
-    let answerSuffix: string = ""
-
-    switch (operation) {
-        case "derivative":
-            previewPrefix = (+ood > 1)?`\\frac{d}{d^{${ood}}${wrt}}`:`\\frac{d}{d${wrt}}`;
-            answerSuffix = (+ood > 1)?`d^{${ood}}${wrt}`:`d${wrt}`;
-            break;
-        case "integral":
-            previewPrefix = "\\int";
-            answerSuffix = ` + c`;
-            break;
-        default:
-            previewPrefix = "";
-            answerSuffix = "";
-    }
+    const previewPrefix = "\\int";
+    const answerSuffix = ` + c`;
 
     return (
     <div className="pt-8 bg-[#00c4eb] text-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-shadow duration-300 hover:shadow-xl border border-gray-200 dark:border-gray-700">
@@ -76,10 +60,9 @@ const Display: React.FC = () => {
                 <p className="text-3xl pb-1">&#40;</p>
                     <Latex displayMode>{`$${displayTex}$`}</Latex>
                 <p className="text-3xl pb-1">&#41;</p>
-                {operation==="integral" &&
                 <span className="text-3xl mr-1">
                     <Latex>{`$d${wrt}$`}</Latex>
-                </span>}
+                </span>
             </div>
             {answerToggle && resultTex === "" && <Loader/>}
             <AnimatePresence initial={false}>
@@ -100,4 +83,4 @@ const Display: React.FC = () => {
 };
 
 
-export default Display;
+export default IntegralDisplay;
