@@ -5,6 +5,8 @@ import cursorSlice from "./slices/cursorSlice"
 import resultTexSlice from "./slices/resultTexSlice"
 import wrtSlice from "./slices/wrtSlice"
 import oodSlice from "./slices/oodSlice"
+import boundSlice from "./slices/boundSlice"
+import errorMessageSlice from "./slices/errorMessageSlice"
 
 export const store = configureStore({
     reducer: { 
@@ -14,6 +16,8 @@ export const store = configureStore({
         resultTex: resultTexSlice,
         wrt: wrtSlice,
         ood: oodSlice,
+        bound: boundSlice,
+        errorMessage: errorMessageSlice,
      },
 });
 

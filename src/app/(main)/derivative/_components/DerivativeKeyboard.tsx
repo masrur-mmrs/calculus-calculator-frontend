@@ -7,6 +7,8 @@ import { calculateDerivative } from '@/app/api/calculate';
 import { setResultTex } from '@/redux/slices/resultTexSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
+import { setErrorMessage } from '@/redux/slices/errorMessageSlice';
+import katex from 'katex';
 
 const DerivativeKeyboard: React.FC = ({}) => {
     const { setAnswerToggle } = useAnswerToggleContext();
@@ -16,6 +18,13 @@ const DerivativeKeyboard: React.FC = ({}) => {
     const ood = useSelector((state: RootState) => state.ood.value);
 
     const fetchResult = async () => {
+        try {
+            katex.renderToString(inputTex)
+        } catch (error) {
+            dispatch(setErrorMessage("Invalid expression"))
+            console.error(error)
+            return;
+        }
         setAnswerToggle(true);
         const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi").replaceAll("θ", "\\theta");
         const derivative = await calculateDerivative(eqn, wrt, ood);

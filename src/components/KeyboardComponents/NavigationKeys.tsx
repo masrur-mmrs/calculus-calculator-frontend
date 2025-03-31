@@ -24,19 +24,19 @@ const NavigationKeys: React.FC<NavigationKeysProps> = ({optionsChildren}) => {
                     <h1>C</h1>
                 </button>
                 <button
-                    className="flex justify-center px-4 sm:px-6 rounded-lg font-mono text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150"
+                    className="flex justify-center items-center px-4 sm:px-6 rounded-lg font-mono text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150"
                     onClick={()=>handleBackSpace(inputTex, index, dispatch)}
                 >
                     <Delete className="h-10 w-10 sm:h-11 sm:w-11"/>
                 </button>
                 <button
-                    className="flex justify-center px-4 sm:px-6 rounded-lg font-mono text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150"
+                    className="flex justify-center items-center px-4 sm:px-6 rounded-lg font-mono text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150"
                     onClick={()=>handlePrev(inputTex, index, dispatch)}
                 >
                     <ChevronLeft className="h-10 w-10 sm:h-11 sm:w-11"/>
                 </button>
                 <button
-                    className="flex justify-center px-4 sm:px-6 rounded-lg font-mono text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150"
+                    className="flex justify-center items-center px-4 sm:px-6 rounded-lg font-mono text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150"
                     onClick={()=>handleNext(inputTex, index, dispatch)}
                     >
                     <ChevronRight className="h-10 w-10 sm:h-11 sm:w-11"/>

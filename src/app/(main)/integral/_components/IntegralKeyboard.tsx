@@ -1,24 +1,37 @@
 import React from 'react';
 import IntegralOptions from './IntegralOptions';
+import { useDispatch, useSelector } from 'react-redux';
 import KeyboardButton from '@/components/KeyboardComponents/KeyboardButton';
 import NavigationKeys from '@/components/KeyboardComponents/NavigationKeys';
 import { useAnswerToggleContext } from '@/context/context';
 import { calculateIntegral } from '@/app/api/calculate';
 import { setResultTex } from '@/redux/slices/resultTexSlice';
 import { AppDispatch, RootState } from '@/redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { setErrorMessage } from '@/redux/slices/errorMessageSlice';
+import katex from 'katex';
 
 const IntegralKeyboard: React.FC = ({}) => {
     const { setAnswerToggle } = useAnswerToggleContext();
     const dispatch = useDispatch<AppDispatch>();
     const inputTex = useSelector((state: RootState) => state.inputTex.value);
     const wrt = useSelector((state: RootState) => state.wrt.value);
-    // const ood = useSelector((state: RootState) => state.ood.value);
+    const bound = useSelector((state: RootState) => state.bound.value)
 
     const fetchResult = async () => {
+        if (!bound.upperBound !== !bound.lowerBound) {
+            dispatch(setErrorMessage("Make sure to include both upper and lower bound"))
+            return;
+        }
+        try {
+            katex.renderToString(inputTex);
+        } catch (error) {
+            dispatch(setErrorMessage("Invalid expression"))
+            console.error(error)
+            return;
+        }
         setAnswerToggle(true);
         const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi").replaceAll("θ", "\\theta");
-        const integral = await calculateIntegral(eqn, wrt);
+        const integral = await calculateIntegral(eqn, wrt, bound);
         dispatch(setResultTex(integral.result));
     };
 

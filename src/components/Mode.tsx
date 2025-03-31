@@ -173,7 +173,7 @@ const container: React.CSSProperties = {
     justifyContent: "flex-start",
     alignItems: "stretch",
     flex: 1,
-    width: 500,
+    width: "100%",
     maxWidth: "100%",
     height: 400,
     backgroundColor: "var(--accent)",

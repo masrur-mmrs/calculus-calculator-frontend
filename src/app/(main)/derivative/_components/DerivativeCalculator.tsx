@@ -8,6 +8,7 @@ import { RootState, AppDispatch } from '@/redux/store';
 import { setInputTex } from '@/redux/slices/inputTexSlice';
 import { clearResultTex } from '@/redux/slices/resultTexSlice';
 import { useAnswerToggleContext } from '@/context/context';
+import { clearErrorMessage } from '@/redux/slices/errorMessageSlice';
 
 const DerivativeCalculator: React.FC = () => {
   const { setAnswerToggle } = useAnswerToggleContext();
@@ -17,12 +18,14 @@ const DerivativeCalculator: React.FC = () => {
 
   useEffect(() => {
     setAnswerToggle(false)
+    dispatch(clearErrorMessage())
     dispatch(clearResultTex())
   }, [inputTex, dispatch, setAnswerToggle]);
 
   useEffect(() => {
     const cleanedInputTex = inputTex.replace("|", "");
     const newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index);
+    dispatch(clearErrorMessage())
     dispatch(setInputTex(newInputTex));
   }, [index, dispatch]);
   //   event.preventDefault();

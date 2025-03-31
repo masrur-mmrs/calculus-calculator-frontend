@@ -33,6 +33,14 @@ textarea {
   resize: none;
 }
 
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-focus-ring-color: transparent;
+}
+
 .katex-html {
   display: none;
 }

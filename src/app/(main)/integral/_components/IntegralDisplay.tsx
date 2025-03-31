@@ -22,10 +22,10 @@ const IntegralDisplay: React.FC = () => {
     const displayTex = useSelector((state: RootState) => state.inputTex.value);
     const resultTex = useSelector((state: RootState) => state.resultTex.value);
     const wrt = useSelector((state: RootState) => state.wrt.value);
-    // const ood = useSelector((state: RootState) => state.ood.value);
+    const bound = useSelector((state: RootState) => state.bound.value)
     
-    const previewPrefix = "\\int";
-    const answerSuffix = ` + c`;
+    const previewPrefix = `\\int_{${bound.lowerBound}}^{${bound.upperBound}}`;
+    const answerSuffix = (bound.upperBound !== "" && bound.lowerBound !== "")?"":` + c`;
 
     return (
     <div className="pt-8 bg-[#00c4eb] text-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-shadow duration-300 hover:shadow-xl border border-gray-200 dark:border-gray-700">
