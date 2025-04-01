@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import * as motion from "motion/react-client";
 import Latex from 'react-latex';
 import Loader from '@/components/Loader';
+import BoundSelector from './BoundSelector';
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useAnswerToggleContext } from '@/context/context';
@@ -24,7 +25,7 @@ const IntegralDisplay: React.FC = () => {
     const wrt = useSelector((state: RootState) => state.wrt.value);
     const bound = useSelector((state: RootState) => state.bound.value)
     
-    const previewPrefix = `\\int_{${bound.lowerBound}}^{${bound.upperBound}}`;
+    const previewPrefix = `\\int`;
     const answerSuffix = (bound.upperBound !== "" && bound.lowerBound !== "")?"":` + c`;
 
     return (
@@ -53,9 +54,11 @@ const IntegralDisplay: React.FC = () => {
                 </motion.div>}
         </AnimatePresence>
         <div className="overflow-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
-            <div className="inline-flex items-center gap-0.5">
-                <span className="text-3xl mr-1">
+            <div className="flex flex-row items-center gap-0.5">
+                <span className="text-3xl flex flex-col items-end">
+                    <BoundSelector bound="upper"/>
                     <Latex>{`$${previewPrefix}$`}</Latex>
+                    <BoundSelector bound="lower"/>
                 </span>
                 <p className="text-3xl pb-1">&#40;</p>
                     <Latex displayMode>{`$${displayTex}$`}</Latex>
@@ -71,7 +74,7 @@ const IntegralDisplay: React.FC = () => {
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0 }}
-                    className="w-full mt-2">
+                    className="w-full mt-2 ml-15">
                         <Latex>{`$=${resultTex}$`}</Latex>
                         <Latex>{`$${answerSuffix}$`}</Latex>
                     </motion.div>}

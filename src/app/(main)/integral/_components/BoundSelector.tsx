@@ -1,8 +1,9 @@
 'use client'
 import React, {useState, ChangeEvent} from 'react';
-import { AppDispatch } from '@/redux/store';
+import { X } from 'lucide-react';
+import { AppDispatch, RootState } from '@/redux/store';
 import { setUpperBound, setLowerBound } from '@/redux/slices/boundSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface BoundSelectorPropsType {
     bound: string;
@@ -10,6 +11,7 @@ interface BoundSelectorPropsType {
 
 const BoundSelector: React.FC<BoundSelectorPropsType> = ({bound}) => {
     const dispatch = useDispatch<AppDispatch>();
+    const boundValue = useSelector((state: RootState) => state.bound.value)
     const [show, setShow] = useState(false);
 
     const handleSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -35,28 +37,37 @@ const BoundSelector: React.FC<BoundSelectorPropsType> = ({bound}) => {
     }
 
     return (
-        <div className="flex flex-col ml-2 border-2 border-white-mode-blue dark:border-muted-teal rounded-xl mr-2">
-            <label htmlFor={bound} className="block text-sm font-bold m-1.5 border-b-2 border-white-mode-blue dark:border-muted-teal text-center">
-                {(bound === "upper")?"UPB":"LWB"}
-            </label>
-            <select
+        <div className="max-w-min text-sm z-0 border-b-2">
+            {!show&&<select
                 id={bound}
+                value={bound==="upper"?boundValue.upperBound:boundValue.lowerBound}
                 onChange={handleSelectionChange}
-                className="h-min w-min p-1.5 ml-0.5 font-mono text-md italic"
+                className="h-min w-14 p-1.5 ml-0.5 font-mono text-sm"
             >
-                <option value="" aria-disabled defaultChecked>∅</option>
+                <option value="" aria-disabled defaultChecked>{(bound === "upper")?"UB":"LB"}</option>
                 <option value="0">0</option>
                 <option value="\infty">∞</option>
                 <option value="-\infty">-∞</option>
                 <option value="e">e</option>
                 <option value="\pi">π</option>
                 <option value="num">✎</option>
-            </select>
-            {show&&<input 
+            </select>}
+            {show&&(<div className="inline-flex">
+                <button 
+                    onClick={()=>{
+                        setShow(false)
+                        dispatch((bound === "upper")?(setUpperBound("")):((setLowerBound(""))))
+                    }}
+                >
+                    <X/>
+                </button>
+                <input 
                 placeholder="0"
                 onChange={handleInputChange}
-                className="m-1.5 w-10 text-center border-t-2 border-white-mode-blue dark:border-muted-teal"
-            />}
+                className="m-1.5 w-10 text-center border-2 rounded-lg"
+                />
+            </div>)
+            }
         </div>
     )
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import BoundSelector from './BoundSelector';
 import { AppDispatch } from '@/redux/store';
 import { setWrt } from '@/redux/slices/wrtSlice';
 import { useDispatch } from 'react-redux';
@@ -24,8 +23,6 @@ const IntegralOptions: React.FC = () => {
                     <option value="\theta">θ</option>
                 </select>
             </div>
-            <BoundSelector bound="upper"/>
-            <BoundSelector bound="lower"/>
         </div>
     );
 };

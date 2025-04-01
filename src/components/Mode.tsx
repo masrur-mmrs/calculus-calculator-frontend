@@ -9,7 +9,7 @@ export default function Variants() {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const { height } = useDimensions(containerRef)
-    const modes = ["derivative", "integral", "matrix"]
+    const modes = ["derivative", "integral"]
 
     return (
         <div>
@@ -175,14 +175,15 @@ const container: React.CSSProperties = {
     flex: 1,
     width: "100%",
     maxWidth: "100%",
-    height: 400,
+    height: "100%",
     backgroundColor: "var(--accent)",
     borderRadius: 20,
     overflow: "hidden",
 }
 
 const nav: React.CSSProperties = {
-    width: "80vw",
+    width: "50vw",
+    height: "100vh"
 }
 
 const background: React.CSSProperties = {
@@ -192,7 +193,8 @@ const background: React.CSSProperties = {
     left: 0,
     bottom: 0,
     zIndex: 10,
-    width: "70vw",
+    width: "50vw",
+    height: "100vh"
 }
 
 const toggleContainer: React.CSSProperties = {
@@ -231,6 +233,7 @@ const listItem: React.CSSProperties = {
     listStyle: "none",
     marginBottom: 20,
     marginLeft: 50,
+    marginRight: 30,
     cursor: "pointer",
     border: "2px solid white",
     borderRadius: 8,
