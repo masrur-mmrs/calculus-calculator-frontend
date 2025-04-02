@@ -55,11 +55,20 @@ const IntegralDisplay: React.FC = () => {
         </AnimatePresence>
         <div className="overflow-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
             <div className="flex flex-row items-center gap-0.5">
-                <span className="text-3xl flex flex-col items-end">
+                <span className="text-3xl flex flex-row items-center">
+                    <span className="text-5xl">
+                        <Latex>{`$${previewPrefix}$`}</Latex>
+                    </span>
+                    <div className="flex flex-col">
+                        <BoundSelector bound="upper"/>
+                        <BoundSelector bound="lower"/>
+                    </div>
+                </span>
+                {/* <span className="text-3xl flex flex-col items-end">
                     <BoundSelector bound="upper"/>
                     <Latex>{`$${previewPrefix}$`}</Latex>
                     <BoundSelector bound="lower"/>
-                </span>
+                </span> */}
                 <p className="text-3xl pb-1">&#40;</p>
                     <Latex displayMode>{`$${displayTex}$`}</Latex>
                 <p className="text-3xl pb-1">&#41;</p>
@@ -74,8 +83,9 @@ const IntegralDisplay: React.FC = () => {
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0 }}
-                    className="w-full mt-2 ml-15">
-                        <Latex>{`$=${resultTex}$`}</Latex>
+                    className="w-full mt-2">
+                        {/* <Latex>{`$=${(resultTex.search('o')>-1)?"\\infty":resultTex}$`}</Latex> */}
+                        <Latex>{`$=${resultTex.replaceAll('o',"\\infty")}$`}</Latex>
                         <Latex>{`$${answerSuffix}$`}</Latex>
                     </motion.div>}
             </AnimatePresence>

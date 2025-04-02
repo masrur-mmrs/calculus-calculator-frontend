@@ -4,6 +4,8 @@ import { X } from 'lucide-react';
 import { AppDispatch, RootState } from '@/redux/store';
 import { setUpperBound, setLowerBound } from '@/redux/slices/boundSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAnswerToggleContext } from '@/context/context';
+import { cn } from '@/app/utils/helpers';
 
 interface BoundSelectorPropsType {
     bound: string;
@@ -11,7 +13,9 @@ interface BoundSelectorPropsType {
 
 const BoundSelector: React.FC<BoundSelectorPropsType> = ({bound}) => {
     const dispatch = useDispatch<AppDispatch>();
+    const { answerToggle } = useAnswerToggleContext();
     const boundValue = useSelector((state: RootState) => state.bound.value)
+
     const [show, setShow] = useState(false);
 
     const handleSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -37,14 +41,14 @@ const BoundSelector: React.FC<BoundSelectorPropsType> = ({bound}) => {
     }
 
     return (
-        <div className="max-w-min text-sm z-0 border-b-2">
+        <div className={cn("max-w-min text-sm z-0 ",!answerToggle?"border-b-2":"")}>
             {!show&&<select
                 id={bound}
                 value={bound==="upper"?boundValue.upperBound:boundValue.lowerBound}
                 onChange={handleSelectionChange}
-                className="h-min w-14 p-1.5 ml-0.5 font-mono text-sm"
+                className="h-7 w-7 p-1.5 ml-0.5 font-mono text-sm appearance-none"
             >
-                <option value="" aria-disabled defaultChecked>{(bound === "upper")?"UB":"LB"}</option>
+                <option value="" aria-disabled defaultChecked>⌄</option>
                 <option value="0">0</option>
                 <option value="\infty">∞</option>
                 <option value="-\infty">-∞</option>
@@ -64,7 +68,7 @@ const BoundSelector: React.FC<BoundSelectorPropsType> = ({bound}) => {
                 <input 
                 placeholder="0"
                 onChange={handleInputChange}
-                className="m-1.5 w-10 text-center border-2 rounded-lg"
+                className="m-1.5 w-10 text-center rounded-lg"
                 />
             </div>)
             }

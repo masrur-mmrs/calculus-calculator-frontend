@@ -1,9 +1,10 @@
 import React from 'react';
-import { AppDispatch } from '@/redux/store';
+import { AppDispatch, RootState } from '@/redux/store';
 import { setWrt } from '@/redux/slices/wrtSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const IntegralOptions: React.FC = () => {
+    const wrt = useSelector((state: RootState) => state.wrt.value)
     const dispatch = useDispatch<AppDispatch>();
 
     return (
@@ -14,6 +15,7 @@ const IntegralOptions: React.FC = () => {
                 </label>
                 <select
                     id="wrt"
+                    value={wrt}
                     onChange={(event) => dispatch(setWrt(event.target.value))}
                     className="h-min w-min p-1.5 ml-0.5 font-mono text-md italic"
                 >
