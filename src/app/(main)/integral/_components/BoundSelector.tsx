@@ -56,21 +56,24 @@ const BoundSelector: React.FC<BoundSelectorPropsType> = ({bound}) => {
             <option value="\pi">π</option>
             <option value="num">✎</option>
             </select>}
-            {show&&(<div className="inline-flex">
-            <button 
-                onClick={()=>{
-                setShow(false)
-                dispatch((bound === "upper")?(setUpperBound("")):((setLowerBound(""))))
-                }}
-            >
-                <X/>
-            </button>
-            <input 
-            placeholder="0"
-            onChange={handleInputChange}
-            className="m-1.5 w-10 text-center rounded-lg"
-            />
-            </div>)
+            {show
+                &&
+            (<div className="inline-flex">
+                <button 
+                    onClick={()=>{
+                        setShow(false)
+                        dispatch((bound === "upper")?(setUpperBound("")):((setLowerBound(""))))
+                    }}
+                    className="max-h-min max-w-min"
+                >
+                    <X size={15}/>
+                </button>
+                <input 
+                placeholder="0"
+                onChange={handleInputChange}
+                className="m-1.5 w-10 text-center rounded-lg"
+                />
+                </div>)
             }
         </div>
     )
