@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const DerivativeOptions: React.FC = () => {
     const wrt = useSelector((state: RootState) => state.wrt.value)
+    const ood = useSelector((state: RootState) => state.ood.value)
     const dispatch = useDispatch<AppDispatch>();
 
     return (
@@ -32,13 +33,12 @@ const DerivativeOptions: React.FC = () => {
                 </label>
                 <select
                     id="ood"
+                    value={ood}
                     onChange={(event) => dispatch(setOod(event.target.value))}
                     className="h-min w-min p-1.5 ml-0.5 font-mono text-md"
                 >
                     <option value="1" defaultChecked>1</option>
                     <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
                 </select>
             </div>
         </div>
