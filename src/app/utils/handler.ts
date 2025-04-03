@@ -260,6 +260,11 @@ export const handleOnKeyClick = (inputTex: string, index: number, dispatch: AppD
                 dispatch(incrementIndex(5));
                 dispatch(incrementCursorIndex(5));
             }
+            if (inputTex.substring(index-4, index) === "sin(" || inputTex.substring(index-4, index) === "cos(" || inputTex.substring(index-4, index) === "tan(") {
+                dispatch(insertTex({index: index-1, tex: "^{-1}"}));
+                dispatch(incrementIndex(5));
+                dispatch(incrementCursorIndex(5))
+            }
             break;
         case "\\sqrt{~}":
             dispatch(insertTex({index: index, tex: "\\sqrt{}"}));
