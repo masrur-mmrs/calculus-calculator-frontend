@@ -32,7 +32,7 @@ const IntegralKeyboard: React.FC = ({}) => {
         setAnswerToggle(true);
         const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi").replaceAll("θ", "\\theta");
         const integral = await calculateIntegral(eqn, wrt, bound);
-        dispatch(setResultTex(integral.result));
+        dispatch(setResultTex(integral.result.replaceAll("\\log", "\\ln").replaceAll('o',"\\infty")));
     };
 
     return (

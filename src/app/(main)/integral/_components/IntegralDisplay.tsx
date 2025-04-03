@@ -84,8 +84,7 @@ const IntegralDisplay: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0 }}
                     className="w-full mt-2">
-                        {/* <Latex>{`$=${(resultTex.search('o')>-1)?"\\infty":resultTex}$`}</Latex> */}
-                        <Latex>{`$=${resultTex.replaceAll('o',"\\infty")}$`}</Latex>
+                        <Latex>{`$=${resultTex}$`}</Latex>
                         <Latex>{`$${answerSuffix}$`}</Latex>
                     </motion.div>}
             </AnimatePresence>
