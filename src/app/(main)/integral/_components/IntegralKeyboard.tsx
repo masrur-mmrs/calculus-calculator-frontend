@@ -30,9 +30,15 @@ const IntegralKeyboard: React.FC = ({}) => {
             return;
         }
         setAnswerToggle(true);
-        const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi").replaceAll("θ", "\\theta");
+        const eqn = inputTex
+                    .replace("|", "")
+                    .replaceAll("π", "\\pi")
+                    .replaceAll("θ", "\\theta")
+                    .replaceAll("\\operatorname{asin}", "\\arcsin")
+                    .replaceAll("\\operatorname{acos}", "\\arccos")
+                    .replaceAll("\\operatorname{atan}", "\\arctan");
         const integral = await calculateIntegral(eqn, wrt, bound);
-        const infinityPattern = /[a-zA-Z]\^{[0-9]*[02468]}/g;
+        const infinityPattern = /[o]\^{[0-9]*[02468]}/g;
         if (integral.result) {
             integral.result = integral.result.replace(infinityPattern, "\\infty");
         }
@@ -72,6 +78,11 @@ const IntegralKeyboard: React.FC = ({}) => {
             <KeyboardButton specieal>{"\\sin(~)"}</KeyboardButton>
             <KeyboardButton specieal>{"\\cos(~)"}</KeyboardButton>
             <KeyboardButton specieal>{"\\tan(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\operatorname{asin}(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\operatorname{acos}(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\operatorname{atan}(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"("}</KeyboardButton>
+            <KeyboardButton specieal>{")"}</KeyboardButton>
             <KeyboardButton specieal fetchResult={fetchResult}>=</KeyboardButton>
             </div>
         </>

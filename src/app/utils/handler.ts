@@ -6,6 +6,18 @@ import { AppDispatch } from '@/redux/store';
 import { findMatchingCurlyBrace, findMatchingParenthesis } from './helpers';
 
 export const handleNext = (inputTex: string, index: number, dispatch: AppDispatch) => {
+    if (inputTex.substring(index, index + 21) === "|\\operatorname{atan}(") {
+        dispatch(incrementIndex(20))
+        return
+    }
+    if (inputTex.substring(index, index + 21) === "|\\operatorname{acos}(") {
+        dispatch(incrementIndex(20))
+        return
+    }
+    if (inputTex.substring(index, index + 21) === "|\\operatorname{asin}(") {
+        dispatch(incrementIndex(20))
+        return
+    }
     if (inputTex.substring(index, index + 11) === "|\\log_{10}(") {
         dispatch(incrementIndex(10))
         return
@@ -55,7 +67,21 @@ export const handleNext = (inputTex: string, index: number, dispatch: AppDispatc
 }
 
 export const handlePrev = (inputTex: string, index: number, dispatch: AppDispatch) => {
-    console.log(inputTex.substring(index - 10, index));
+    if (inputTex.substring(index - 20, index) === "\\operatorname{asin}(") {
+        dispatch(decrementIndex(20))
+        dispatch(decrementCursorIndex(20))
+        return 
+    }
+    if (inputTex.substring(index - 21, index) === "\\operatorname{acos}(") {
+        dispatch(decrementIndex(20))
+        dispatch(decrementCursorIndex(20))
+        return
+    }
+    if (inputTex.substring(index - 21, index) === "\\operatorname{atan}(") {
+        dispatch(decrementIndex(20))
+        dispatch(decrementCursorIndex(20))
+        return
+    }
     if (inputTex.substring(index - 10, index) === "\\log_{10}(") {
         dispatch(decrementIndex(9))
         dispatch(decrementCursorIndex(4));
@@ -100,6 +126,7 @@ export const handleClear = (dispatch: AppDispatch) => {
 }
 
 export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDispatch) => {
+
     if (inputTex.substring(index - 8, index) === "~\\times~") {
         const newTex = inputTex.substring(0, index - 8) + inputTex.substring(index);
         dispatch(setInputTex(newTex));
@@ -109,18 +136,19 @@ export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDi
     }
     if (inputTex.charAt(index-1) === "}") {
         const matchedBraceIndex = findMatchingCurlyBrace(inputTex, index-1);
-        // console.log(inputTex.substring(matchedBraceIndex-4, matchedBraceIndex+1));
         if (inputTex.substring(matchedBraceIndex-4, matchedBraceIndex+1) === "\\sqrt") {
             const newTex = inputTex.substring(0, matchedBraceIndex-4) + inputTex.substring(index);
             dispatch(setInputTex(newTex));
             dispatch(setCurrentIndex(matchedBraceIndex-4));
             dispatch(decrementCursorIndex(1));
+            return;
         }
         if (inputTex.charAt(matchedBraceIndex) === "^") {
             const newTex = inputTex.substring(0, matchedBraceIndex) + inputTex.substring(index);
             dispatch(setInputTex(newTex));
             dispatch(setCurrentIndex(matchedBraceIndex));
             dispatch(decrementCursorIndex(1));
+            return;
         }
         if (inputTex.charAt(matchedBraceIndex) === "}") {
             const secondMatchedBraceIndex = findMatchingCurlyBrace(inputTex, matchedBraceIndex);
@@ -129,43 +157,42 @@ export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDi
                 dispatch(setInputTex(newTex));
                 dispatch(setCurrentIndex(secondMatchedBraceIndex-4));
                 dispatch(decrementCursorIndex(1));
+                return;
             }
         }
     }
     if (inputTex.charAt(index-1) === ")") {
         const matchedParenthesisIndex = findMatchingParenthesis(inputTex, index-1);
-        if (inputTex.substring(matchedParenthesisIndex-3, matchedParenthesisIndex+1) === "\\log") {
-            const newTex = inputTex.substring(0, matchedParenthesisIndex-3) + inputTex.substring(index);
+        const eighteenLetterMatch = inputTex.substring(matchedParenthesisIndex-18, matchedParenthesisIndex+1)
+        if (eighteenLetterMatch === "\\operatorname{atan}" || 
+            eighteenLetterMatch === "\\operatorname{acos}" || 
+            eighteenLetterMatch === "\\operatorname{asin}") {
+            const newTex = inputTex.substring(0, matchedParenthesisIndex-18) + inputTex.substring(index);
             dispatch(setInputTex(newTex));
-            dispatch(setCurrentIndex(matchedParenthesisIndex-3));
-            dispatch(decrementCursorIndex(4));
+            dispatch(setCurrentIndex(matchedParenthesisIndex-18));
+            dispatch(decrementCursorIndex(1));
+            return;
         }
-        if (inputTex.substring(matchedParenthesisIndex-3, matchedParenthesisIndex+1) === "\\sin") {
+        const fourLetterMatch = inputTex.substring(matchedParenthesisIndex-3, matchedParenthesisIndex+1)
+        if (fourLetterMatch=== "\\log" ||
+            fourLetterMatch == "\\tan" ||
+            fourLetterMatch === "\\cos" ||
+            fourLetterMatch === "\\sin") {
             const newTex = inputTex.substring(0, matchedParenthesisIndex-3) + inputTex.substring(index);
             dispatch(setInputTex(newTex));
             dispatch(setCurrentIndex(matchedParenthesisIndex-3));
             dispatch(decrementCursorIndex(4));
-        }
-        if (inputTex.substring(matchedParenthesisIndex-3, matchedParenthesisIndex+1) === "\\cos") {
-            const newTex = inputTex.substring(0, matchedParenthesisIndex-3) + inputTex.substring(index);
-            dispatch(setInputTex(newTex));
-            dispatch(setCurrentIndex(matchedParenthesisIndex-3));
-            dispatch(decrementCursorIndex(4));
-        }
-        if (inputTex.substring(matchedParenthesisIndex-3, matchedParenthesisIndex+1) === "\\tan") {
-            const newTex = inputTex.substring(0, matchedParenthesisIndex-3) + inputTex.substring(index);
-            dispatch(setInputTex(newTex));
-            dispatch(setCurrentIndex(matchedParenthesisIndex-3));
-            dispatch(decrementCursorIndex(4));
+            return;
         }
         if (inputTex.substring(matchedParenthesisIndex-2, matchedParenthesisIndex+1) === "\\ln") {
             const newTex = inputTex.substring(0, matchedParenthesisIndex-2) + inputTex.substring(index);
             dispatch(setInputTex(newTex));
             dispatch(setCurrentIndex(matchedParenthesisIndex-2));
             dispatch(decrementCursorIndex(3));
+            return;
         }
     }
-    const regex = /[0-9exyzπθ+\-]+/g;
+    const regex = /[0-9exyzπθ+\-()]+/g;
     if (regex.test(inputTex.charAt(index-1))) {
         const newTex = inputTex.substring(0, index-1) + inputTex.substring(index);
         dispatch(setInputTex(newTex));
@@ -176,15 +203,53 @@ export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDi
 }
 
 export const handleOnKeyClick = (inputTex: string, index: number, dispatch: AppDispatch, children: React.ReactNode, fetchResult: ()=> void, ) => {
-    console.log(inputTex);
+    // console.log(inputTex);
     switch (children!.toString()) {
         case "=":
             if (fetchResult) fetchResult();
             break;
         case "\\div":
+            console.log(inputTex.charAt(index-1))
             const regex = /[0-9xyzθ]+/g;
             const matches = inputTex.slice(0, index).match(regex);
-            if (matches) {
+            if (inputTex.charAt(index-1) === ")") {
+                const matchingParenthesis = findMatchingParenthesis(inputTex, index-1);
+                const twoLetterFunction = inputTex.substring(matchingParenthesis-2, matchingParenthesis+1);
+                const threeLetterFunction = inputTex.substring(matchingParenthesis-3, matchingParenthesis+1);
+                const fourLetterOperatorFunction = inputTex.substring(matchingParenthesis-18, matchingParenthesis+1) 
+                console.log(inputTex.substring(matchingParenthesis-18, matchingParenthesis+1))
+                if (twoLetterFunction === "\\ln") {
+                    const newTex = inputTex.substring(0, matchingParenthesis-2) + inputTex.substring(index);
+                    console.log("New Tex: ", newTex)
+                    dispatch(setInputTex(newTex));
+                    const insideTex = inputTex.substring(matchingParenthesis-2, index);
+                    dispatch(insertTex({index: matchingParenthesis-2, tex: `\\frac{${insideTex}}{}`}));
+                    console.log(`\\frac{${insideTex}}{`.length)
+                    dispatch(setCurrentIndex(`\\frac{${insideTex}}{`.length + matchingParenthesis - 2));
+                    dispatch(incrementCursorIndex(1));
+                } else if (threeLetterFunction === "\\log" || threeLetterFunction === "\\sin" || threeLetterFunction === "\\cos" || threeLetterFunction === "\\tan") {
+                    const newTex = inputTex.substring(0, matchingParenthesis-3) + inputTex.substring(index);
+                    dispatch(setInputTex(newTex));
+                    const insideTex = inputTex.substring(matchingParenthesis-3, index)
+                    dispatch(insertTex({index: matchingParenthesis-3, tex: `\\frac{${insideTex}}{}`}));
+                    dispatch(setCurrentIndex(`\\frac{${insideTex}}{`.length + matchingParenthesis - 3));
+                    dispatch(incrementCursorIndex(1));
+                } else if (fourLetterOperatorFunction === "\\operatorname{atan}" || fourLetterOperatorFunction === "\\operatorname{acos}" || fourLetterOperatorFunction === "\\operatorname{asin}") {
+                    const newTex = inputTex.substring(0, matchingParenthesis-18) + inputTex.substring(index);
+                    dispatch(setInputTex(newTex));
+                    const insideTex = inputTex.substring(matchingParenthesis-18, index)
+                    dispatch(insertTex({index: matchingParenthesis-18, tex: `\\frac{${insideTex}}{}`}));
+                    dispatch(setCurrentIndex(`\\frac{${insideTex}}{`.length + matchingParenthesis - 18));
+                    dispatch(incrementCursorIndex(1));
+                } else {
+                    const newTex = inputTex.substring(0, matchingParenthesis + 1) + inputTex.substring(index);
+                    dispatch(setInputTex(newTex));
+                    const insideTex = inputTex.substring(matchingParenthesis + 1, index)
+                    dispatch(insertTex({index: matchingParenthesis + 1, tex: `\\frac{${insideTex}}{}`}));
+                    dispatch(setCurrentIndex(`\\frac{${insideTex}}{`.length + matchingParenthesis + 1));
+                    dispatch(incrementCursorIndex(1));
+                }
+            } else if (matches) {
                 const lastMatch = matches[matches.length - 1];
                 const lastMatchIndex = inputTex.lastIndexOf(lastMatch);
                 if (lastMatchIndex + lastMatch.length === index) {
@@ -195,28 +260,10 @@ export const handleOnKeyClick = (inputTex: string, index: number, dispatch: AppD
                     dispatch(incrementCursorIndex(1));
                     break;
                 }
-            }
-            dispatch(insertTex({index: index, tex: "\\frac{}{}"}));
-            dispatch(incrementIndex(6));
-            dispatch(incrementCursorIndex(1));
-            if (inputTex.charAt(index-1) === ")") {
-                const matchingParenthesis = findMatchingParenthesis(inputTex, index-1);
-                const twoLetterFunction = inputTex.substring(matchingParenthesis-2, matchingParenthesis+1);
-                const threeLetterFunction = inputTex.substring(matchingParenthesis-3, matchingParenthesis+1);
-                console.log(twoLetterFunction)
-                if (twoLetterFunction === "\\ln") {
-                    const newTex = inputTex.substring(0, matchingParenthesis-2) + inputTex.substring(index);
-                    dispatch(setInputTex(newTex));
-                    dispatch(insertTex({index: matchingParenthesis-4, tex: `\\frac{${inputTex.substring(matchingParenthesis-2, index)}}{}`}));
-                    dispatch(setCurrentIndex(`\\frac{${inputTex.substring(matchingParenthesis-2, index)}}{`.length));
-                    dispatch(incrementCursorIndex(1));
-                } else if (threeLetterFunction === "\\log" || threeLetterFunction === "\\sin" || threeLetterFunction === "\\cos" || threeLetterFunction === "\\tan") {
-                    const newTex = inputTex.substring(0, matchingParenthesis-3) + inputTex.substring(index);
-                    dispatch(setInputTex(newTex));
-                    dispatch(insertTex({index: matchingParenthesis-5, tex: `\\frac{${inputTex.substring(matchingParenthesis-3, index)}}{}`}));
-                    dispatch(setCurrentIndex(`\\frac{${inputTex.substring(matchingParenthesis-3, index)}}{`.length));
-                    dispatch(incrementCursorIndex(1));
-                }
+            } else {
+                dispatch(insertTex({index: index, tex: "\\frac{}{}"}));
+                dispatch(incrementIndex(6));
+                dispatch(incrementCursorIndex(1));
             }
             break;
         case "[~]^{[~]}":
@@ -260,11 +307,6 @@ export const handleOnKeyClick = (inputTex: string, index: number, dispatch: AppD
                 dispatch(incrementIndex(5));
                 dispatch(incrementCursorIndex(5));
             }
-            if (inputTex.substring(index-4, index) === "sin(" || inputTex.substring(index-4, index) === "cos(" || inputTex.substring(index-4, index) === "tan(") {
-                dispatch(insertTex({index: index-1, tex: "^{-1}"}));
-                dispatch(incrementIndex(5));
-                dispatch(incrementCursorIndex(5))
-            }
             break;
         case "\\sqrt{~}":
             dispatch(insertTex({index: index, tex: "\\sqrt{}"}));
@@ -296,6 +338,21 @@ export const handleOnKeyClick = (inputTex: string, index: number, dispatch: AppD
             dispatch(incrementIndex(5));
             dispatch(incrementCursorIndex(5));
             break; 
+        case "\\operatorname{asin}(~)":
+            dispatch(insertTex({index: index, tex: "\\operatorname{asin}()"}));
+            dispatch(incrementIndex(20));
+            dispatch(incrementCursorIndex(20));
+            break;
+        case "\\operatorname{acos}(~)":
+            dispatch(insertTex({index: index, tex: "\\operatorname{acos}()"}));
+            dispatch(incrementIndex(20));
+            dispatch(incrementCursorIndex(20));
+            break;
+        case "\\operatorname{atan}(~)":
+            dispatch(insertTex({index: index, tex: "\\operatorname{atan}()"}));
+            dispatch(incrementIndex(20));
+            dispatch(incrementCursorIndex(20));
+            break;
         default:
             dispatch(insertTex({index: index, tex: children!.toString()}));
             dispatch(incrementIndex(children!.toString().length));

@@ -25,7 +25,7 @@ export const findMatchingCurlyBrace = (inputString: string, index: number) => {
 export const findMatchingParenthesis = (inputString: string, index: number) => {
     let braceCount = 1;
     index--;
-    while (braceCount > 0) {
+    while (braceCount > 0 && index >= 0 && index < inputString.length) {
         if (inputString.charAt(index) === "(") {
             braceCount--;
             index--;

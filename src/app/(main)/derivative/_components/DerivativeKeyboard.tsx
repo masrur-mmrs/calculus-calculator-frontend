@@ -26,7 +26,13 @@ const DerivativeKeyboard: React.FC = ({}) => {
             return;
         }
         setAnswerToggle(true);
-        const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi").replaceAll("θ", "\\theta");
+        const eqn = inputTex
+                    .replace("|", "")
+                    .replaceAll("π", "\\pi")
+                    .replaceAll("θ", "\\theta")
+                    .replaceAll("\\operatorname{asin}", "\\arcsin")
+                    .replaceAll("\\operatorname{acos}", "\\arccos")
+                    .replaceAll("\\operatorname{atan}", "\\arctan");
         const derivative = await calculateDerivative(eqn, wrt, ood);
         dispatch(setResultTex(derivative.result));
     };
@@ -64,6 +70,11 @@ const DerivativeKeyboard: React.FC = ({}) => {
             <KeyboardButton specieal>{"\\sin(~)"}</KeyboardButton>
             <KeyboardButton specieal>{"\\cos(~)"}</KeyboardButton>
             <KeyboardButton specieal>{"\\tan(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\operatorname{asin}(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\operatorname{acos}(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\operatorname{atan}(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"("}</KeyboardButton>
+            <KeyboardButton specieal>{")"}</KeyboardButton>
             <KeyboardButton specieal fetchResult={fetchResult}>=</KeyboardButton>
             </div>
         </>
