@@ -6,6 +6,14 @@ import { AppDispatch } from '@/redux/store';
 import { findMatchingCurlyBrace, findMatchingParenthesis } from './helpers';
 
 export const handleNext = (inputTex: string, index: number, dispatch: AppDispatch) => {
+    if (inputTex.substring(index, index + 3) === "|\\%") {
+        dispatch(incrementIndex(2))
+        return
+    }
+    if (inputTex.substring(index, index + 7) === "|^\\circ") {
+        dispatch(incrementIndex(6))
+        return
+    }
     if (inputTex.substring(index, index + 21) === "|\\operatorname{atan}(") {
         dispatch(incrementIndex(20))
         return
@@ -67,6 +75,14 @@ export const handleNext = (inputTex: string, index: number, dispatch: AppDispatc
 }
 
 export const handlePrev = (inputTex: string, index: number, dispatch: AppDispatch) => {
+    if (inputTex.substring(index - 2, index) === "\\%") {
+        dispatch(decrementIndex(2))
+        return
+    }
+    if (inputTex.substring(index - 6, index) === "^\\circ") {
+        dispatch(decrementIndex(6))
+        return
+    }
     if (inputTex.substring(index - 20, index) === "\\operatorname{asin}(") {
         dispatch(decrementIndex(20))
         dispatch(decrementCursorIndex(20))
@@ -192,6 +208,14 @@ export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDi
             return;
         }
     }
+    if (inputTex.charAt(index-1) === "%") {
+        console.log("Inside %")
+        const newTex = inputTex.substring(0, index-2) + inputTex.substring(index);
+        dispatch(setInputTex(newTex));
+        dispatch(decrementIndex(2));
+        dispatch(decrementCursorIndex(1));
+        return;
+    }
     const regex = /[0-9exyzπθ+\-()]+/g;
     if (regex.test(inputTex.charAt(index-1))) {
         const newTex = inputTex.substring(0, index-1) + inputTex.substring(index);
@@ -208,8 +232,8 @@ export const handleOnKeyClick = (inputTex: string, index: number, dispatch: AppD
         case "=":
             if (fetchResult) fetchResult();
             break;
+        case "\\frac{[~]}{[~]}":
         case "\\div":
-            console.log(inputTex.charAt(index-1))
             const regex = /[0-9xyzθ]+/g;
             const matches = inputTex.slice(0, index).match(regex);
             if (inputTex.charAt(index-1) === ")") {
@@ -264,6 +288,51 @@ export const handleOnKeyClick = (inputTex: string, index: number, dispatch: AppD
                 dispatch(insertTex({index: index, tex: "\\frac{}{}"}));
                 dispatch(incrementIndex(6));
                 dispatch(incrementCursorIndex(1));
+            }
+            break;
+        case "[~]^\\circ":
+            dispatch(insertTex({index: index, tex: "^\\circ"}));
+            dispatch(incrementIndex(6));
+            dispatch(incrementCursorIndex(3));
+            // const degreeRegex = /[0-9exyzθπ]+/g;
+            // const degreeMatches = inputTex.slice(0, index).match(degreeRegex);
+            // if (degreeMatches) {
+            //     const lastMatch = degreeMatches[degreeMatches.length - 1];
+            //     const lastMatchIndex = inputTex.lastIndexOf(lastMatch);
+            //     if (lastMatchIndex + lastMatch.length === index) {
+            //         const newTex = inputTex.slice(0, lastMatchIndex) + inputTex.slice(lastMatchIndex + lastMatch.length);
+            //         dispatch(setInputTex(newTex));
+            //         dispatch(insertTex({index: lastMatchIndex, tex: `${lastMatch}^\\circ`}));
+            //         dispatch(setCurrentIndex(lastMatchIndex + `${lastMatch}^\\circ`.length));
+            //         dispatch(incrementCursorIndex(3));
+            //         break;
+            //     }
+            // }
+            // if (inputTex.charAt(index-1) === ")" || inputTex.charAt(index-1) === "}" ) {
+            //     dispatch(insertTex({index: index, tex: "^\\circ"}));
+            //     dispatch(incrementIndex(5));
+            //     dispatch(incrementCursorIndex(3));
+            // }
+            break;
+        case "[~]^{2}":
+            const squaredRegex = /[0-9exyzθπ]+/g;
+            const squaredMatches = inputTex.slice(0, index).match(squaredRegex);
+            if (squaredMatches) {
+                const lastMatch = squaredMatches[squaredMatches.length - 1];
+                const lastMatchIndex = inputTex.lastIndexOf(lastMatch);
+                if (lastMatchIndex + lastMatch.length === index) {
+                    const newTex = inputTex.slice(0, lastMatchIndex) + inputTex.slice(lastMatchIndex + lastMatch.length);
+                    dispatch(setInputTex(newTex));
+                    dispatch(insertTex({index: lastMatchIndex, tex: `${lastMatch}^{2}`}));
+                    dispatch(setCurrentIndex(lastMatchIndex + `${lastMatch}^{2}`.length));
+                    dispatch(incrementCursorIndex(3));
+                    break;
+                }
+            }
+            if (inputTex.charAt(index-1) === ")" || inputTex.charAt(index-1) === "}" ) {
+                dispatch(insertTex({index: index, tex: "^{2}"}));
+                dispatch(incrementIndex(3));
+                dispatch(incrementCursorIndex(3));
             }
             break;
         case "[~]^{[~]}":

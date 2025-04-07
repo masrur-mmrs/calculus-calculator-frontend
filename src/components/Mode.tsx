@@ -9,7 +9,7 @@ export default function Variants() {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const { height } = useDimensions(containerRef)
-    const modes = ["derivative", "integral"]
+    const modes = ["basic", "derivative", "integral"]
 
     return (
         <div>
@@ -183,7 +183,7 @@ const container: React.CSSProperties = {
 
 const nav: React.CSSProperties = {
     width: "50vw",
-    height: "100vh"
+    height: "100%"
 }
 
 const background: React.CSSProperties = {
@@ -194,7 +194,7 @@ const background: React.CSSProperties = {
     bottom: 0,
     zIndex: 10,
     width: "50vw",
-    height: "100vh"
+    height: "100%"
 }
 
 const toggleContainer: React.CSSProperties = {
@@ -228,7 +228,7 @@ const listItem: React.CSSProperties = {
     color: "white",
     alignItems: "center",
     justifyContent: "center",
-    padding: 1,
+    padding: 2,
     margin: 20,
     listStyle: "none",
     marginBottom: 20,
