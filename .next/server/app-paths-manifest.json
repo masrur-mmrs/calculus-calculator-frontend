@@ -1,0 +1,5 @@
+{
+  "/unauthorized/page": "app/unauthorized/page.js",
+  "/(main)/derivative/page": "app/(main)/derivative/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
+}
