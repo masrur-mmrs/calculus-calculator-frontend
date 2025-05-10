@@ -4,6 +4,9 @@ import type { Variants } from "motion/react"
 import * as motion from "motion/react-client"
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "@/redux/store"
+import { clearInputTex } from "@/redux/slices/inputTexSlice"
 
 export default function Variants() {
     const [isOpen, setIsOpen] = useState(false)
@@ -71,6 +74,7 @@ const Navigation = ({ modes, show, toggle } : { modes: string[], show: boolean, 
 
 const MenuItem = ({ m, i, show, toggle }: { m: string, i: number, show: boolean, toggle: () => void }) => {
     const router  = useRouter();
+    const dispatch = useDispatch<AppDispatch>()
     return (
             <motion.div>
                 <motion.li
@@ -87,6 +91,7 @@ const MenuItem = ({ m, i, show, toggle }: { m: string, i: number, show: boolean,
                     whileTap={{ scale: 0.95 }}
                     onClick={() => {
                         router.push(m);
+                        dispatch(clearInputTex());
                         toggle();
                     }}
                     key={i}

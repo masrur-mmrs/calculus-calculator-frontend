@@ -28,30 +28,6 @@ const DerivativeCalculator: React.FC = () => {
     dispatch(clearErrorMessage())
     dispatch(setInputTex(newInputTex));
   }, [index, dispatch]);
-  //   event.preventDefault();
-  //   setAnswerToggle(true);
-
-  //   if (!inputTex || !operation || !wrt) {
-  //     window.alert("Input missing")
-  //     console.error("Invalid input");
-  //     return;
-  //   }
-
-  //   const eqn = inputTex.replace("|", "").replaceAll("π", "\\pi").replaceAll("θ", "\\theta");
-  //   switch (operation) {
-  //     case "derivative":
-  //       const derivative = await calculateDerivative(eqn, wrt);
-  //       setResultTex(derivative.result);
-  //       break;
-  //     case "integral":
-  //       console.log(eqn)
-  //       const integral = await calculateIntegral(eqn, wrt);
-  //       setResultTex(integral.result);
-  //       break;
-  //     default:
-  //       console.error("Invalid operation");
-  //   }
-  // };
 
   return (
     <div className="flex flex-col items-center w-fit sm:w-full mx-4 ">
