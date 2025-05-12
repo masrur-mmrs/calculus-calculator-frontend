@@ -180,7 +180,7 @@ const container: React.CSSProperties = {
     flex: 1,
     width: "100%",
     maxWidth: "100%",
-    height: "100%",
+    height: "100vh",
     backgroundColor: "var(--accent)",
     borderRadius: 20,
     overflow: "hidden",
@@ -199,7 +199,7 @@ const background: React.CSSProperties = {
     bottom: 0,
     zIndex: 10,
     width: "50vw",
-    height: "100%"
+    height: "100vh"
 }
 
 const toggleContainer: React.CSSProperties = {
