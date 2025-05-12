@@ -22,6 +22,23 @@ const IntegralKeyboard: React.FC = ({}) => {
             dispatch(setErrorMessage("Make sure to include both upper and lower bound"))
             return;
         }
+        if (
+            bound.upperBound !== "0" &&
+            bound.lowerBound !== "0" &&
+            bound.upperBound !== "e" &&
+            bound.lowerBound !== "e" &&
+            bound.upperBound !== "\\pi" &&
+            bound.lowerBound !== "\\pi" &&
+            bound.upperBound !== "-\\infty" &&
+            bound.lowerBound !== "-\\infty" &&
+            bound.upperBound !== "\\infty" &&
+            bound.lowerBound !== "\\infty" &&
+            !(/^\d+$/.test(bound.upperBound)) &&
+            !(/^\d+$/.test(bound.lowerBound))
+        ) {
+            dispatch(setErrorMessage("Invalid bound"))
+            return;
+        }
         try {
             katex.renderToString(inputTex);
         } catch (error) {
