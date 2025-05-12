@@ -40,7 +40,13 @@ const DerivativeCalculator: React.FC = () => {
   const Result = () => <ResultStep result={stepsResponse.result} />;
   return (
     <>
-      <StepsModal open={open} stepsLength={stepsResponse.steps.length} setOpen={setOpen} Simplified={<Simplified/>} Steps={<Steps/>} Result={<Result/>}/>
+      <StepsModal 
+      open={open} 
+      stepsLength={stepsResponse.steps.length} 
+      setOpen={setOpen} Simplified={<Simplified/>} 
+      Steps={<Steps/>} 
+      Result={<Result/>}
+      />
       <div className="flex flex-col items-center w-fit sm:w-full mx-4 ">
         <h6 className="py-5 font-semibold text-3xl">Derivative</h6>
         <div className="my-4 w-full sm:w-fit">

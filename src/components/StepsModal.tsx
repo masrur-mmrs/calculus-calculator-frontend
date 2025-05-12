@@ -1,6 +1,10 @@
 import React from 'react';
 import { AnimatePresence } from "motion/react";
 import * as motion from "motion/react-client";
+import Loader from './Loader';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/redux/store';
+import { clearStepsResponse } from '@/redux/slices/stepsResponseSlice';
 
 interface StepsModalProps {
     open: boolean;
@@ -13,9 +17,11 @@ interface StepsModalProps {
 
 
 const StepsModal: React.FC<StepsModalProps> = ({open, stepsLength, setOpen, Simplified, Steps, Result}) => {
+    const dispatch = useDispatch<AppDispatch>();
 
     const onClose = () => {
         setOpen(false);
+        dispatch(clearStepsResponse());
     };
 
     return (
@@ -33,7 +39,9 @@ const StepsModal: React.FC<StepsModalProps> = ({open, stepsLength, setOpen, Simp
             transition={{ type: "spring", stiffness: 150, damping: 20 }}
             >
                 <h1 className="text-xl font-bold mb-4 pb-4 border-b-2 border-muted-teal">Steps</h1>
-                <div className="max-h-[50vh] sm:max-h-[60vh] max-w-[90vw] overflow-y-auto flex flex-col items-center text-center text-md font-sans">
+                {stepsLength<=1?
+                (<Loader/>):
+                (<div className="max-h-[50vh] sm:max-h-[60vh] max-w-[90vw] overflow-y-auto flex flex-col items-center text-center text-md font-sans">
                     <motion.div 
                         className="inline-flex"
                         initial={{ opacity: 0, y: -10 }}
@@ -51,7 +59,7 @@ const StepsModal: React.FC<StepsModalProps> = ({open, stepsLength, setOpen, Simp
                     >
                         {Result}
                     </motion.div>
-                </div>
+                </div>)}
                 <div className="border-t-2 border-muted-teal mt-4">
                     <button className="mt-4 px-4 py-2 bg-blue-500 text-white float-end rounded active:scale-95 transform ease-in-out duration-150" onClick={onClose}>Close</button>
                 </div>
