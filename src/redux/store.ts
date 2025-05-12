@@ -8,6 +8,7 @@ import oodSlice from "./slices/oodSlice"
 import boundSlice from "./slices/boundSlice"
 import errorMessageSlice from "./slices/errorMessageSlice"
 import sdSlice from "./slices/sdSlice"
+import stepsResponseSlice from "./slices/stepsResponseSlice"
 
 export const store = configureStore({
     reducer: { 
@@ -20,6 +21,7 @@ export const store = configureStore({
         bound: boundSlice,
         errorMessage: errorMessageSlice,
         sd: sdSlice,
+        stepsResponse: stepsResponseSlice,
      },
 });
 

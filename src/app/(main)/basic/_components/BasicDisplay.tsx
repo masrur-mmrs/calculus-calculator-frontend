@@ -46,7 +46,7 @@ const BasicDisplay: React.FC = () => {
                     <h3>Answer</h3>
                 </motion.div>}
         </AnimatePresence>
-        <div className="overflow-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
+        <div className="max-w-[50vw] sm:max-w-[35vw] overflow-x-auto py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
             <div className="inline-flex items-center gap-0.5">
                 <Latex displayMode>{`$${displayTex}$`}</Latex>
             </div>

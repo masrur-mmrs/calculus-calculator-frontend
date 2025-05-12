@@ -8,16 +8,16 @@ const IntegralOptions: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     return (
-        <div className="flex flex-row w-min m-1 justify-center mt-5 mx-2">
-            <div className="flex flex-col ml-2 border-2 border-white-mode-blue dark:border-muted-teal rounded-xl mr-2">
-                <label htmlFor="wrt" className="block text-sm font-bold m-1.5 border-b-2 border-white-mode-blue dark:border-muted-teal">
+        <>
+            <div className="flex flex-col border-2 border-white-mode-blue dark:border-muted-teal rounded-xl">
+                <label htmlFor="wrt" className="block text-sm text-center font-bold m-1.5 border-b-2 border-white-mode-blue dark:border-muted-teal">
                     WRT
                 </label>
                 <select
                     id="wrt"
                     value={wrt}
                     onChange={(event) => dispatch(setWrt(event.target.value))}
-                    className="h-min w-min p-1.5 ml-0.5 font-mono text-md italic"
+                    className="h-max w-max p-5 m-auto font-mono text-md italic"
                 >
                     <option value="x" defaultChecked>x</option>
                     <option value="y">y</option>
@@ -25,7 +25,10 @@ const IntegralOptions: React.FC = () => {
                     <option value="\theta">θ</option>
                 </select>
             </div>
-        </div>
+            <div className="col-span-1"/>
+            <div className="col-span-1"/>
+        </>
+            
     );
 };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import BasicOptions from './BasicOptions';
 import KeyboardButton from '@/components/KeyboardComponents/KeyboardButton';
-import NavigationKeys from '@/components/KeyboardComponents/NavigationKeys';
 import { useAnswerToggleContext } from '@/context/context';
 import { basicEvaluate } from '@/app/api/calculate';
 import { setResultTex } from '@/redux/slices/resultTexSlice';
@@ -9,6 +8,7 @@ import { AppDispatch, RootState } from '@/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { setErrorMessage } from '@/redux/slices/errorMessageSlice';
 import katex from 'katex';
+import OptionKeys from '@/components/KeyboardComponents/OptionKeys';
 
 const BasicKeyboard: React.FC = ({}) => {
     const { setAnswerToggle } = useAnswerToggleContext();
@@ -41,7 +41,7 @@ const BasicKeyboard: React.FC = ({}) => {
 
     return (
         <>
-            <NavigationKeys optionsChildren={<BasicOptions/>}/>
+            <OptionKeys><BasicOptions/></OptionKeys>
             <div className="grid grid-cols-5 gap-2 mt-1.5">
             <KeyboardButton>1</KeyboardButton>
             <KeyboardButton>2</KeyboardButton>
@@ -68,14 +68,14 @@ const BasicKeyboard: React.FC = ({}) => {
             <KeyboardButton specieal>{"[~]^{-1}"}</KeyboardButton>
             <KeyboardButton specieal>{"[~]^{[~]}"}</KeyboardButton>
             <KeyboardButton specieal>{"\\ln(~)"}</KeyboardButton>
-            <KeyboardButton specieal>{"\\log{(~)}"}</KeyboardButton>
             <KeyboardButton specieal>{"\\sin(~)"}</KeyboardButton>
             <KeyboardButton specieal>{"\\cos(~)"}</KeyboardButton>
             <KeyboardButton specieal>{"\\tan(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"("}</KeyboardButton>
             <KeyboardButton specieal>{"\\operatorname{asin}(~)"}</KeyboardButton>
+            <KeyboardButton specieal>{"\\log{(~)}"}</KeyboardButton>
             <KeyboardButton specieal>{"\\operatorname{acos}(~)"}</KeyboardButton>
             <KeyboardButton specieal>{"\\operatorname{atan}(~)"}</KeyboardButton>
-            <KeyboardButton specieal>{"("}</KeyboardButton>
             <KeyboardButton specieal>{")"}</KeyboardButton>
             <KeyboardButton specieal fetchResult={fetchResult}>=</KeyboardButton>
             </div>

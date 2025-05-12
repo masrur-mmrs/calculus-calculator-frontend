@@ -30,3 +30,13 @@ export const calculateIntegral = async (expression: string, variable: string, bo
   
     return res.json();
   };
+
+export const getDerivativeSteps = async (expression: string, variable: string, orderOfDerivative: string) => {
+    const res = await fetch(BACKEND_URL+"/derivative-steps", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ expression, variable, orderOfDerivative }),
+    });
+  
+    return res.json();
+  };

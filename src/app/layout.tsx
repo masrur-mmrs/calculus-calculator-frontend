@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Head from "next/head";
 import { Geist, Geist_Mono } from "next/font/google";
 import ReduxProvider from "../redux/provider";
-import { AnswerToggleProvider } from "@/context/context";
+import { AnswerToggleProvider, StepsModalProvider } from "@/context/context";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,7 +37,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ReduxProvider>
           <AnswerToggleProvider>
-            {children}
+            <StepsModalProvider>
+              {children}
+            </StepsModalProvider>
           </AnswerToggleProvider>
         </ReduxProvider>
       </body>

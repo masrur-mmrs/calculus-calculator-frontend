@@ -53,7 +53,7 @@ const IntegralDisplay: React.FC = () => {
                     <h3>Answer</h3>
                 </motion.div>}
         </AnimatePresence>
-        <div className="overflow-hidden py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
+         <div className="max-w-[50vw] sm:max-w-[35vw] overflow-x-auto py-3 px-2 bg-[#3288d9] dark:bg-gray-900 rounded-md text-2xl min-w-[100%] sm:min-w-md tracking-wide">
             <div className="flex flex-row items-center gap-0.5">
                 <span className="text-3xl flex flex-row items-center">
                     <span className="text-5xl">
@@ -64,11 +64,6 @@ const IntegralDisplay: React.FC = () => {
                         <BoundSelector bound="lower"/>
                     </div>
                 </span>
-                {/* <span className="text-3xl flex flex-col items-end">
-                    <BoundSelector bound="upper"/>
-                    <Latex>{`$${previewPrefix}$`}</Latex>
-                    <BoundSelector bound="lower"/>
-                </span> */}
                 <p className="text-3xl pb-1">&#40;</p>
                     <Latex displayMode>{`$${displayTex}$`}</Latex>
                 <p className="text-3xl pb-1">&#41;</p>
@@ -84,8 +79,7 @@ const IntegralDisplay: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0 }}
                     className="w-full mt-2">
-                        <Latex>{`$=${resultTex}$`}</Latex>
-                        <Latex>{`$${answerSuffix}$`}</Latex>
+                        <Latex>{`$=${resultTex} ${answerSuffix}$`}</Latex>
                     </motion.div>}
             </AnimatePresence>
         </div>
