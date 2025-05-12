@@ -188,7 +188,7 @@ const container: React.CSSProperties = {
 
 const nav: React.CSSProperties = {
     width: "50vw",
-    height: "100%"
+    height: "100vh"
 }
 
 const background: React.CSSProperties = {
