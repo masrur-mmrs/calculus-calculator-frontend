@@ -150,6 +150,13 @@ export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDi
         dispatch(decrementCursorIndex(1));
         return;
     }
+    if (inputTex.substring(index-4, index) === "\\ln(") {
+        const newTex = inputTex.substring(0, index-4) + inputTex.substring(index);
+        dispatch(setInputTex(newTex));
+        dispatch(setCurrentIndex(index-4));
+        dispatch(decrementCursorIndex(1));
+        return;
+    }
     if (inputTex.charAt(index-1) === "(") {
         const newTex = inputTex.substring(0, index-5) + inputTex.substring(index);
         dispatch(setInputTex(newTex));
