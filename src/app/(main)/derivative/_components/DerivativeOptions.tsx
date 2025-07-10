@@ -6,8 +6,11 @@ import { setWrt } from '@/redux/slices/wrtSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDerivativeSteps } from '@/app/api/calculate';
 import { setStepsResponse } from '@/redux/slices/stepsResponseSlice';
+import { setErrorMessage } from '@/redux/slices/errorMessageSlice';
+import { useStepsModalContext } from '@/context/context';
 
 const DerivativeOptions: React.FC = () => {
+    const { setOpen } = useStepsModalContext();
     const inputTex = useSelector((state: RootState) => state.inputTex.value)
     const wrt = useSelector((state: RootState) => state.wrt.value)
     const ood = useSelector((state: RootState) => state.ood.value)
@@ -22,7 +25,12 @@ const DerivativeOptions: React.FC = () => {
                     .replaceAll("\\operatorname{acos}", "\\arccos")
                     .replaceAll("\\operatorname{atan}", "\\arctan");
         const steps = await getDerivativeSteps(eqn, wrt, ood);
-        if (steps) {
+        if (steps.error) {
+            setOpen(false);
+            dispatch(setErrorMessage(steps.error));
+            return;
+        }
+        if (steps && steps.error === undefined) {
             dispatch(setStepsResponse(steps));
         }
     }
