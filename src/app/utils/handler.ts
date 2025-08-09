@@ -6,6 +6,24 @@ import { AppDispatch } from '@/redux/store';
 import { findMatchingCurlyBrace, findMatchingParenthesis } from './helpers';
 
 export const handleNext = (inputTex: string, index: number, dispatch: AppDispatch) => {
+    // Matrix next handling
+    if (inputTex.substring(index, index + 16) === "|\\begin{pmatrix}") {
+        dispatch(incrementIndex(15));
+        dispatch(incrementCursorIndex(1));
+        return;
+    }
+    if (inputTex.substring(index, index + 15) === "|\\end{pmatrix}") {
+        dispatch(incrementIndex(13));
+        dispatch(incrementCursorIndex(1));
+        return;        
+    }
+    //Matrix cleanup
+    if (inputTex.charAt(index+2) === "☐") {
+        const newTex = inputTex.substring(0, index + 1) + inputTex.substring(index + 5);
+        console.log("New Tex: ", newTex);
+        // dispatch(setInputTex(newTex));
+    }
+    // Other modes
     if (inputTex.substring(index, index + 3) === "|\\%") {
         dispatch(incrementIndex(2))
         return
@@ -63,10 +81,14 @@ export const handleNext = (inputTex: string, index: number, dispatch: AppDispatc
         return
     }
     if (inputTex.substring(index, index + 2) === "|\\") {
-        const nextBraceIndex = inputTex.indexOf("{", index);
-        if (nextBraceIndex !== -1) {
-        dispatch(incrementIndex(nextBraceIndex - index));
+        if (inputTex.substring(index, index + 3) === "|\\o") {
+            const nextBraceIndex = inputTex.indexOf("{", index);
+            if (nextBraceIndex !== -1) {
+            dispatch(incrementIndex(nextBraceIndex - index));
+            }
+            return;
         }
+        dispatch(incrementIndex(2))
         return;
     }
     if (index < inputTex.length - 1) {
@@ -75,6 +97,23 @@ export const handleNext = (inputTex: string, index: number, dispatch: AppDispatc
 }
 
 export const handlePrev = (inputTex: string, index: number, dispatch: AppDispatch) => {
+    // Matrix next handling
+    if (inputTex.substring(index - 15, index) === "\\begin{pmatrix}") {
+        dispatch(decrementIndex(15));
+        dispatch(decrementCursorIndex(1));
+        return;
+    }
+    if (inputTex.substring(index - 13, index) === "\\end{pmatrix}") {
+        dispatch(decrementIndex(13));
+        dispatch(decrementCursorIndex(1));
+        return;        
+    }
+    if (inputTex.substring(index - 1, index) === "\\") {
+        dispatch(decrementIndex(2))
+        dispatch(decrementCursorIndex(1))
+        return
+    }
+    // Other modes
     if (inputTex.substring(index - 2, index) === "\\%") {
         dispatch(decrementIndex(2))
         return
@@ -240,7 +279,12 @@ export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDi
     }
 }
 
-export const handleOnKeyClick = (inputTex: string, index: number, dispatch: AppDispatch, children: React.ReactNode, fetchResult: ()=> void, ) => {
+export const handleOnKeyClick = (
+    inputTex: string, 
+    index: number, 
+    dispatch: AppDispatch, 
+    children: React.ReactNode, 
+    fetchResult: ()=> void, ) => {
     // console.log(inputTex);
     switch (children!.toString()) {
         case "=":

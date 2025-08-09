@@ -34,7 +34,8 @@ const IntegralKeyboard: React.FC = ({}) => {
             bound.upperBound !== "\\infty" &&
             bound.lowerBound !== "\\infty" &&
             !(/^\d+$/.test(bound.upperBound)) &&
-            !(/^\d+$/.test(bound.lowerBound))
+            !(/^\d+$/.test(bound.lowerBound)) &&
+            bound.upperBound !== bound.lowerBound
         ) {
             dispatch(setErrorMessage("Invalid bound"))
             return;

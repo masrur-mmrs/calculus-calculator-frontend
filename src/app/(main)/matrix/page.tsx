@@ -1,9 +1,10 @@
 import React from 'react';
+import MatrixCalculator from './_components/MatrixCalculator';
 
 const MatrixPage: React.FC = ({}) => {
     return (
         <>
-            <h1 className="flex flex-col justify-center content-center items-center">Under Construction 🛠️</h1>
+            <MatrixCalculator/>
         </>
     );
 };
