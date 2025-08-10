@@ -17,12 +17,17 @@ export const handleNext = (inputTex: string, index: number, dispatch: AppDispatc
         dispatch(incrementCursorIndex(1));
         return;        
     }
-    //Matrix cleanup
-    if (inputTex.charAt(index+2) === "☐") {
-        const newTex = inputTex.substring(0, index + 1) + inputTex.substring(index + 5);
-        console.log("New Tex: ", newTex);
-        // dispatch(setInputTex(newTex));
+    if (inputTex.substring(index, index + 2) === "|&") {
+        dispatch(incrementIndex(1));
+        dispatch(incrementCursorIndex(1));
+        return;
     }
+    //Matrix cleanup
+    // if (inputTex.charAt(index+1) === "☐") {
+    //     const newTex = inputTex.substring(0, index + 1) + inputTex.substring(index + 2);
+    //     console.log("New Tex: ", newTex);
+    //     dispatch(setInputTex(newTex));
+    // }
     // Other modes
     if (inputTex.substring(index, index + 3) === "|\\%") {
         dispatch(incrementIndex(2))
@@ -80,6 +85,7 @@ export const handleNext = (inputTex: string, index: number, dispatch: AppDispatc
         dispatch(incrementIndex(1))
         return
     }
+    //Also handlex matrix nextline
     if (inputTex.substring(index, index + 2) === "|\\") {
         if (inputTex.substring(index, index + 3) === "|\\o") {
             const nextBraceIndex = inputTex.indexOf("{", index);
@@ -104,7 +110,7 @@ export const handlePrev = (inputTex: string, index: number, dispatch: AppDispatc
         return;
     }
     if (inputTex.substring(index - 13, index) === "\\end{pmatrix}") {
-        dispatch(decrementIndex(13));
+        dispatch(decrementIndex(14));
         dispatch(decrementCursorIndex(1));
         return;        
     }

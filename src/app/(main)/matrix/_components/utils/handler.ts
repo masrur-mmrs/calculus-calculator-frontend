@@ -10,13 +10,18 @@ export const handleOnKeyClick = (
     children: React.ReactNode,
     fetchResult?: () => void
 ) => {
-    console.log(inputTex);
+    // console.log(inputTex);
     switch (children!.toString()) {
         case "=":
             if (fetchResult) fetchResult();
             break;
         case "\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}":
             dispatch(insertTex({index: index, tex: "\\begin{pmatrix}&☐\\\\☐&☐\\end{pmatrix}"}));
+            dispatch(incrementIndex(15));
+            dispatch(incrementCursorIndex(4));
+            break;
+        case "\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}":
+            dispatch(insertTex({index: index, tex: "\\begin{pmatrix}&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}))
             dispatch(incrementIndex(15));
             dispatch(incrementCursorIndex(4));
             break;

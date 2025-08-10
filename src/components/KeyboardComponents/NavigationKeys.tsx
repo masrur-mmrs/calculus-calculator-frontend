@@ -33,7 +33,7 @@ const NavigationKeys: React.FC = ({}) => {
                 </button>
                 <button
                     className="px-3.5 sm:px-6 min-w-16 w-full flex justify-center items-center rounded-lg font-mono text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150"
-                    onClick={()=>handleNext(inputTex, index, dispatch)}
+                    onClick={()=>handleNext(inputTex.toString(), index, dispatch)}
                     >
                     <ChevronRight className="h-10 w-10 sm:h-11 sm:w-11"/>
                 </button>

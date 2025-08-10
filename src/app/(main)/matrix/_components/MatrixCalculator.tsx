@@ -4,11 +4,13 @@ import MatrixDisplay from './MatrixDisplay';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/redux/store';
-import { insertTex, setInputTex } from '@/redux/slices/inputTexSlice';
+import { setInputTex } from '@/redux/slices/inputTexSlice';
 import { clearResultTex } from '@/redux/slices/resultTexSlice';
 import { useAnswerToggleContext } from '@/context/context';
 import { clearErrorMessage } from '@/redux/slices/errorMessageSlice';
 import MatrixKeyboard from './MatrixKeyboard';
+import { incrementIndex } from '@/redux/slices/indexSlice';
+import { incrementCursorIndex } from '@/redux/slices/cursorSlice';
 
 const MatrixCalculator: React.FC = () => {
   const { setAnswerToggle } = useAnswerToggleContext();
@@ -24,26 +26,68 @@ const MatrixCalculator: React.FC = () => {
 
   useEffect(() => {
     const cleanedInputTex = inputTex.replace("|", "");
-    const newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index);
-    dispatch(clearErrorMessage())
-    dispatch(setInputTex(newInputTex));
+    let newInputTex = "";
 
+    // Insert cursor at correct spot
+    if (cleanedInputTex[index] === "☐") {
+      newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index + 1);
+    } else if (cleanedInputTex[index - 1] === "☐") {
+      newInputTex = cleanedInputTex.slice(0, index - 1) + "|" + cleanedInputTex.slice(index - 1);
+    } else {
+      newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index);
+      dispatch(clearErrorMessage());
+    }
+
+    // console.log("From useEffect: ", index);
+
+    let inserted = false;
+
+    // Placeholder detection + insertion
     const emptyFirstElementIndex = newInputTex.indexOf("\\begin{pmatrix}&");
     const emptyMidElementIndex = newInputTex.indexOf("&&");
-    console.log(emptyMidElementIndex);
+    const emptyLastElementOfRowIndex = newInputTex.indexOf("&\\");
+    const emptyFirstElementOfRowIndex = newInputTex.indexOf("\\&");
+    // const emptyLastElementIndex = newInputTex.indexOf("|\\end{pmatrix}");
+
     if (emptyFirstElementIndex > -1) {
-      dispatch(insertTex({ index: (emptyFirstElementIndex + 15), tex: "☐" }));
+      newInputTex =
+        newInputTex.slice(0, emptyFirstElementIndex + 15) +
+        "☐" +
+        newInputTex.slice(emptyFirstElementIndex + 15);
+      inserted ||= (emptyFirstElementIndex + 15) <= index;
     }
     if (emptyMidElementIndex > -1) {
-      dispatch(insertTex({ index: (emptyMidElementIndex + 1), tex: "☐" }));
+      newInputTex =
+        newInputTex.slice(0, emptyMidElementIndex + 1) +
+        "☐" +
+        newInputTex.slice(emptyMidElementIndex + 1);
+      inserted ||= (emptyMidElementIndex + 1) <= index;
     }
-    // if (inputTex.indexOf("|☐") > -1 || inputTex.indexOf("☐|") > -1) {
-    //   // dispatch(insertTex({ index: index, tex: "|" }));
-    //   const cleanedInputTex = inputTex.replace("|☐", "") || inputTex.replace("☐|", "");
-    //   const newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index);
-    //   dispatch(setInputTex(newInputTex));
-    // }
+    if (emptyLastElementOfRowIndex > -1) {
+      newInputTex =
+        newInputTex.slice(0, emptyLastElementOfRowIndex + 1) +
+        "☐" +
+        newInputTex.slice(emptyLastElementOfRowIndex + 1);
+      inserted ||= (emptyLastElementOfRowIndex + 1) <= index;
+    }
+    if (emptyFirstElementOfRowIndex > -1) {
+      newInputTex =
+        newInputTex.slice(0, emptyFirstElementOfRowIndex + 1) +
+        "☐" +
+        newInputTex.slice(emptyFirstElementOfRowIndex + 1);
+      inserted ||= (emptyFirstElementOfRowIndex + 1) <= index;
+    }
+    // Optional: emptyLastElementIndex handling
+    // ...
+
+    dispatch(setInputTex(newInputTex));
+
+    if (inserted) {
+      dispatch(incrementIndex(1));
+      dispatch(incrementCursorIndex(1));
+    }
   }, [index, dispatch]);
+
 
   return (
     <div className="flex flex-col items-center w-fit sm:w-full mx-4">
