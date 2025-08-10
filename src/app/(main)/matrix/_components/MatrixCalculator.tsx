@@ -9,7 +9,7 @@ import { clearResultTex } from '@/redux/slices/resultTexSlice';
 import { useAnswerToggleContext } from '@/context/context';
 import { clearErrorMessage } from '@/redux/slices/errorMessageSlice';
 import MatrixKeyboard from './MatrixKeyboard';
-import { incrementIndex } from '@/redux/slices/indexSlice';
+import { decrementIndex, incrementIndex } from '@/redux/slices/indexSlice';
 import { incrementCursorIndex } from '@/redux/slices/cursorSlice';
 
 const MatrixCalculator: React.FC = () => {
@@ -31,14 +31,20 @@ const MatrixCalculator: React.FC = () => {
     // Insert cursor at correct spot
     if (cleanedInputTex[index] === "☐") {
       newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index + 1);
-    } else if (cleanedInputTex[index - 1] === "☐") {
+    } else if (cleanedInputTex.substring(index, index + 1) === "|☐") {
+      console.log("+1")
       newInputTex = cleanedInputTex.slice(0, index - 1) + "|" + cleanedInputTex.slice(index - 1);
+    } else if (cleanedInputTex.substring(index-1, index) === "☐") {
+      console.log("-1")
+      newInputTex = cleanedInputTex.slice(0, index - 1) + "|" + cleanedInputTex.slice(index);
+      dispatch(decrementIndex(1));
     } else {
       newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index);
       dispatch(clearErrorMessage());
     }
 
-    // console.log("From useEffect: ", index);
+    console.log("From useEffect: ", index);
+    // console.log(cleanedInputTex.substring(index - 1, index))
 
     let inserted = false;
 
@@ -47,7 +53,6 @@ const MatrixCalculator: React.FC = () => {
     const emptyMidElementIndex = newInputTex.indexOf("&&");
     const emptyLastElementOfRowIndex = newInputTex.indexOf("&\\");
     const emptyFirstElementOfRowIndex = newInputTex.indexOf("\\&");
-    // const emptyLastElementIndex = newInputTex.indexOf("|\\end{pmatrix}");
 
     if (emptyFirstElementIndex > -1) {
       newInputTex =

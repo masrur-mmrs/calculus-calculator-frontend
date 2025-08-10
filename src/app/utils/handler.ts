@@ -7,12 +7,13 @@ import { findMatchingCurlyBrace, findMatchingParenthesis } from './helpers';
 
 export const handleNext = (inputTex: string, index: number, dispatch: AppDispatch) => {
     // Matrix next handling
+    console.log(inputTex.substring(index, index + 15))
     if (inputTex.substring(index, index + 16) === "|\\begin{pmatrix}") {
         dispatch(incrementIndex(15));
         dispatch(incrementCursorIndex(1));
         return;
     }
-    if (inputTex.substring(index, index + 15) === "|\\end{pmatrix}") {
+    if (inputTex.substring(index, index + 14) === "|\\end{pmatrix}") {
         dispatch(incrementIndex(13));
         dispatch(incrementCursorIndex(1));
         return;        
