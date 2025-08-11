@@ -1,184 +1,135 @@
 import React from 'react';
-import { incrementIndex, decrementIndex, setCurrentIndex } from '@/redux/slices/indexSlice';
-import { setCursorIndex, decrementCursorIndex, incrementCursorIndex } from '@/redux/slices/cursorSlice';
-import { clearInputTex, insertTex, setInputTex } from '@/redux/slices/inputTexSlice';
+import { 
+        incrementIndex,
+        decrementIndex,
+        setCurrentIndex
+    } from '@/redux/slices/indexSlice';
+import { 
+        setCursorIndex,
+        decrementCursorIndex,
+        incrementCursorIndex
+    } from '@/redux/slices/cursorSlice';
+import { 
+        clearInputTex,
+        insertTex, 
+        setInputTex 
+    } from '@/redux/slices/inputTexSlice';
 import { AppDispatch } from '@/redux/store';
-import { findMatchingCurlyBrace, findMatchingParenthesis } from './helpers';
+import { 
+        findMatchingCurlyBrace,
+        findMatchingParenthesis 
+    } from './helpers';
 
-export const handleNext = (inputTex: string, index: number, dispatch: AppDispatch) => {
-    // Matrix next handling
-    console.log(inputTex.substring(index, index + 15))
-    if (inputTex.substring(index, index + 16) === "|\\begin{pmatrix}") {
-        dispatch(incrementIndex(15));
-        dispatch(incrementCursorIndex(1));
-        return;
-    }
-    if (inputTex.substring(index, index + 14) === "|\\end{pmatrix}") {
-        dispatch(incrementIndex(13));
-        dispatch(incrementCursorIndex(1));
-        return;        
-    }
-    if (inputTex.substring(index, index + 2) === "|&") {
-        dispatch(incrementIndex(1));
-        dispatch(incrementCursorIndex(1));
-        return;
-    }
-    //Matrix cleanup
-    // if (inputTex.charAt(index+1) === "☐") {
-    //     const newTex = inputTex.substring(0, index + 1) + inputTex.substring(index + 2);
-    //     console.log("New Tex: ", newTex);
-    //     dispatch(setInputTex(newTex));
-    // }
-    // Other modes
-    if (inputTex.substring(index, index + 3) === "|\\%") {
-        dispatch(incrementIndex(2))
-        return
-    }
-    if (inputTex.substring(index, index + 7) === "|^\\circ") {
-        dispatch(incrementIndex(6))
-        return
-    }
-    if (inputTex.substring(index, index + 21) === "|\\operatorname{atan}(") {
-        dispatch(incrementIndex(20))
-        return
-    }
-    if (inputTex.substring(index, index + 21) === "|\\operatorname{acos}(") {
-        dispatch(incrementIndex(20))
-        return
-    }
-    if (inputTex.substring(index, index + 21) === "|\\operatorname{asin}(") {
-        dispatch(incrementIndex(20))
-        return
-    }
-    if (inputTex.substring(index, index + 11) === "|\\log_{10}(") {
-        dispatch(incrementIndex(10))
-        return
-    }
-    if (inputTex.substring(index, index + 9) === "|~\\times~") {
-        dispatch(incrementIndex(7))
-    }
-    if (inputTex.substring(index, index + 6) === "|\\log(") {
-        dispatch(incrementIndex(5))
-    }
-    if (inputTex.substring(index, index + 6) === "|\\sin(") {
-        dispatch(incrementIndex(5))
-    }
-    if (inputTex.substring(index, index + 6) === "|\\cos(") {
-        dispatch(incrementIndex(5))
-    }
-    if (inputTex.substring(index, index + 6) === "|\\tan(") {
-        dispatch(incrementIndex(5))
-    }
-    if (inputTex.substring(index, index + 5) === "|\\ln(") {
-        dispatch(incrementIndex(4))
-    }
-    if (inputTex.substring(index, index + 3) === "|^{") {
-        dispatch(incrementIndex(1))
-    }
-    if (inputTex.substring(index, index + 3) === "|~}") {
-        dispatch(incrementIndex(2))
-    }
-    if (inputTex.substring(index, index + 3) === "|}{") {
-        dispatch(incrementIndex(2))
-        return
-    }
-    if (inputTex.substring(index, index + 2) === "|}") {
-        dispatch(incrementIndex(1))
-        return
-    }
-    //Also handlex matrix nextline
-    if (inputTex.substring(index, index + 2) === "|\\") {
-        if (inputTex.substring(index, index + 3) === "|\\o") {
-            const nextBraceIndex = inputTex.indexOf("{", index);
-            if (nextBraceIndex !== -1) {
-            dispatch(incrementIndex(nextBraceIndex - index));
-            }
-            return;
-        }
-        dispatch(incrementIndex(2))
-        return;
-    }
-    if (index < inputTex.length - 1) {
-        dispatch(incrementIndex(1))
-    }
+const matchesAtIndex = (
+    input: string,
+    index: number,
+    pattern: string
+): boolean => input.substring(index, index + pattern.length) === pattern;
+
+/** Utility: increments index + cursor */
+const advanceIndex = (
+    dispatch: AppDispatch,
+    indexAmount: number,
+    cursorAmount: number = indexAmount
+) => {
+    dispatch(incrementIndex(indexAmount));
+    if (cursorAmount) dispatch(incrementCursorIndex(cursorAmount));
+};
+
+const rewindIndex = (
+    dispatch: AppDispatch,
+    indexAmount: number,
+    cursorAmount: number = indexAmount
+) => {
+    dispatch(decrementIndex(indexAmount));
+    if (cursorAmount) dispatch(decrementCursorIndex(cursorAmount));
+};
+
+interface NavigationPattern {
+    pattern: string;
+    indexChange: number;
+    cursorChange?: number;
 }
 
-export const handlePrev = (inputTex: string, index: number, dispatch: AppDispatch) => {
-    // Matrix next handling
-    if (inputTex.substring(index - 15, index) === "\\begin{pmatrix}") {
-        dispatch(decrementIndex(15));
-        dispatch(decrementCursorIndex(1));
+const NEXT_PATTERNS: NavigationPattern[] = [
+    { pattern: '|\\begin{pmatrix}', indexChange: 15, cursorChange: 1 },
+    { pattern: '|\\end{pmatrix}', indexChange: 13, cursorChange: 1 },
+    { pattern: '|&', indexChange: 1, cursorChange: 1 },
+    { pattern: '|\\%', indexChange: 2 },
+    { pattern: '|^\\circ', indexChange: 6 },
+    { pattern: '|\\operatorname{atan}(', indexChange: 20 },
+    { pattern: '|\\operatorname{acos}(', indexChange: 20 },
+    { pattern: '|\\operatorname{asin}(', indexChange: 20 },
+    { pattern: '|\\log_{10}(', indexChange: 10 },
+    { pattern: '|~\\times~', indexChange: 7 },
+    { pattern: '|\\log(', indexChange: 5 },
+    { pattern: '|\\sin(', indexChange: 5 },
+    { pattern: '|\\cos(', indexChange: 5 },
+    { pattern: '|\\tan(', indexChange: 5 },
+    { pattern: '|\\ln(', indexChange: 4 },
+    { pattern: '|^{', indexChange: 1 },
+    { pattern: '|~}', indexChange: 2 },
+    { pattern: '|}{', indexChange: 2 },
+    { pattern: '|}', indexChange: 1 },
+];
+
+const PREV_PATTERNS: NavigationPattern[] = [
+    { pattern: "\\begin{pmatrix}", indexChange: 15, cursorChange: 1 },
+    { pattern: "\\end{pmatrix}", indexChange: 14, cursorChange: 1},
+    { pattern: "\\", indexChange: 2, cursorChange: 2},
+    { pattern: "\\%", indexChange: 2, cursorChange: 1},
+    { pattern: "^\\circ", indexChange: 6, cursorChange: 1},
+    { pattern: "\\operatorname{asin}(", indexChange: 20, cursorChange: 1},
+    { pattern: "\\operatorname{acos}(", indexChange: 20, cursorChange: 1},
+    { pattern: "\\operatorname{atan}(", indexChange: 20, cursorChange: 1},
+    { pattern: "\\log_{10}(", indexChange: 9, cursorChange: 1},
+    { pattern: "~\\times~", indexChange: 7, cursorChange: 1},
+    { pattern: "\\frac{", indexChange: 4, cursorChange: 1},
+    { pattern: "\\sqrt{", indexChange: 4, cursorChange: 1},
+    { pattern: "\\log(", indexChange: 4, cursorChange: 1},
+    { pattern: "\\sin(" ,indexChange: 4, cursorChange: 1},
+    { pattern: "\\cos(", indexChange: 4, cursorChange: 1},
+    { pattern: "\\tan(" ,indexChange: 4, cursorChange: 1},
+    { pattern: "\\ln(", indexChange: 3, cursorChange: 1},
+    { pattern: "{", indexChange: 1, cursorChange: 1},
+]
+
+export const handleNext = (
+  inputTex: string,
+  index: number,
+  dispatch: AppDispatch
+) => {
+    for (const { pattern, indexChange, cursorChange } of NEXT_PATTERNS) {
+        if (matchesAtIndex(inputTex, index, pattern)) {
+            advanceIndex(dispatch, indexChange, cursorChange);
+            return;
+        }
+    }
+
+    // Special case: matrix nextline or \o{...}
+    if (matchesAtIndex(inputTex, index, '|\\')) {
+        if (matchesAtIndex(inputTex, index, '|\\o')) {
+            const nextBraceIndex = inputTex.indexOf('{', index);
+            if (nextBraceIndex !== -1) {
+                dispatch(incrementIndex(nextBraceIndex - index));
+            }
+        } else {
+            advanceIndex(dispatch, 2);
+        }
         return;
     }
-    if (inputTex.substring(index - 13, index) === "\\end{pmatrix}") {
-        dispatch(decrementIndex(14));
-        dispatch(decrementCursorIndex(1));
-        return;        
+
+    if (index < inputTex.length - 1) advanceIndex(dispatch, 1);
+};
+
+export const handlePrev = (inputTex: string, index: number, dispatch: AppDispatch) => {
+    for (const { pattern, indexChange, cursorChange } of PREV_PATTERNS) {
+        if (matchesAtIndex(inputTex, index, pattern)) {
+            rewindIndex(dispatch, indexChange, cursorChange);
+            return;
+        }
     }
-    if (inputTex.substring(index - 1, index) === "\\") {
-        dispatch(decrementIndex(2))
-        dispatch(decrementCursorIndex(1))
-        return
-    }
-    // Other modes
-    if (inputTex.substring(index - 2, index) === "\\%") {
-        dispatch(decrementIndex(2))
-        return
-    }
-    if (inputTex.substring(index - 6, index) === "^\\circ") {
-        dispatch(decrementIndex(6))
-        return
-    }
-    if (inputTex.substring(index - 20, index) === "\\operatorname{asin}(") {
-        dispatch(decrementIndex(20))
-        dispatch(decrementCursorIndex(20))
-        return 
-    }
-    if (inputTex.substring(index - 21, index) === "\\operatorname{acos}(") {
-        dispatch(decrementIndex(20))
-        dispatch(decrementCursorIndex(20))
-        return
-    }
-    if (inputTex.substring(index - 21, index) === "\\operatorname{atan}(") {
-        dispatch(decrementIndex(20))
-        dispatch(decrementCursorIndex(20))
-        return
-    }
-    if (inputTex.substring(index - 10, index) === "\\log_{10}(") {
-        dispatch(decrementIndex(9))
-        dispatch(decrementCursorIndex(4));
-    }
-    if (inputTex.substring(index - 8, index) === "~\\times~") {
-        dispatch(decrementIndex(7))
-    }
-    if (inputTex.substring(index - 6, index) === "\\frac{") {
-        dispatch(decrementIndex(4))
-        dispatch(decrementCursorIndex(2));
-    }
-    if (inputTex.substring(index - 6, index) === "\\sqrt{") {
-        dispatch(decrementIndex(4))
-    }
-    if (inputTex.substring(index - 5, index) === "\\log(") {
-        dispatch(decrementIndex(4))
-    }
-    if (inputTex.substring(index - 5, index) === "\\sin(") {
-        dispatch(decrementIndex(4))
-    }
-    if (inputTex.substring(index - 5, index) === "\\cos(") {
-        dispatch(decrementIndex(4))
-    }
-    if (inputTex.substring(index - 5, index) === "\\tan(") {
-        dispatch(decrementIndex(4))
-    }
-    if (inputTex.substring(index - 4, index) === "\\ln(") {
-        dispatch(decrementIndex(3))
-    }
-    if (inputTex.substring(index - 1, index) === "{") {
-        dispatch(decrementIndex(1))
-    }
-    if (index > 0) {
-        dispatch(decrementIndex(1));
-    }
+    if (index > 0) rewindIndex(dispatch, 1, 1);
 }
 
 export const handleClear = (dispatch: AppDispatch) => {

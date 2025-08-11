@@ -82,8 +82,6 @@ const MatrixCalculator: React.FC = () => {
         newInputTex.slice(emptyFirstElementOfRowIndex + 1);
       inserted ||= (emptyFirstElementOfRowIndex + 1) <= index;
     }
-    // Optional: emptyLastElementIndex handling
-    // ...
 
     dispatch(setInputTex(newInputTex));
 
