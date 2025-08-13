@@ -1,32 +1,42 @@
-import React from 'react';
+import React from "react";
 import { 
         incrementIndex,
         decrementIndex,
         setCurrentIndex
-    } from '@/redux/slices/indexSlice';
+    } from "@/redux/slices/indexSlice";
 import { 
         setCursorIndex,
         decrementCursorIndex,
         incrementCursorIndex
-    } from '@/redux/slices/cursorSlice';
+    } from "@/redux/slices/cursorSlice";
 import { 
         clearInputTex,
         insertTex, 
         setInputTex 
-    } from '@/redux/slices/inputTexSlice';
-import { AppDispatch } from '@/redux/store';
+    } from "@/redux/slices/inputTexSlice";
+import { AppDispatch } from "@/redux/store";
 import { 
         findMatchingCurlyBrace,
         findMatchingParenthesis 
-    } from './helpers';
+    } from "./helpers";
+
+enum NavigationOperation {
+    Previous,
+    Next
+}
+interface NavigationPattern {
+    pattern: string;
+    indexChange: number;
+    cursorChange?: number;
+}
 
 const matchesAtIndex = (
     input: string,
     index: number,
-    pattern: string
-): boolean => input.substring(index, index + pattern.length) === pattern;
-
-/** Utility: increments index + cursor */
+    pattern: string,
+    operation: NavigationOperation,
+): boolean => (operation) ? input.substring(index, index + pattern.length) === pattern : input.substring(index - pattern.length, index) === pattern;
+ 
 const advanceIndex = (
     dispatch: AppDispatch,
     indexAmount: number,
@@ -45,32 +55,28 @@ const rewindIndex = (
     if (cursorAmount) dispatch(decrementCursorIndex(cursorAmount));
 };
 
-interface NavigationPattern {
-    pattern: string;
-    indexChange: number;
-    cursorChange?: number;
-}
-
 const NEXT_PATTERNS: NavigationPattern[] = [
-    { pattern: '|\\begin{pmatrix}', indexChange: 15, cursorChange: 1 },
-    { pattern: '|\\end{pmatrix}', indexChange: 13, cursorChange: 1 },
-    { pattern: '|&', indexChange: 1, cursorChange: 1 },
-    { pattern: '|\\%', indexChange: 2 },
-    { pattern: '|^\\circ', indexChange: 6 },
-    { pattern: '|\\operatorname{atan}(', indexChange: 20 },
-    { pattern: '|\\operatorname{acos}(', indexChange: 20 },
-    { pattern: '|\\operatorname{asin}(', indexChange: 20 },
-    { pattern: '|\\log_{10}(', indexChange: 10 },
-    { pattern: '|~\\times~', indexChange: 7 },
-    { pattern: '|\\log(', indexChange: 5 },
-    { pattern: '|\\sin(', indexChange: 5 },
-    { pattern: '|\\cos(', indexChange: 5 },
-    { pattern: '|\\tan(', indexChange: 5 },
-    { pattern: '|\\ln(', indexChange: 4 },
-    { pattern: '|^{', indexChange: 1 },
-    { pattern: '|~}', indexChange: 2 },
-    { pattern: '|}{', indexChange: 2 },
-    { pattern: '|}', indexChange: 1 },
+    { pattern: "|\\begin{pmatrix}", indexChange: 15, cursorChange: 1 },
+    { pattern: "|\\end{pmatrix}", indexChange: 13, cursorChange: 1 },
+    { pattern: "|&", indexChange: 1, cursorChange: 1 },
+    { pattern: "|\\%", indexChange: 2 },
+    { pattern: "|^\\circ", indexChange: 6 },
+    { pattern: "|\\operatorname{atan}(", indexChange: 20 },
+    { pattern: "|\\operatorname{acos}(", indexChange: 20 },
+    { pattern: "|\\operatorname{asin}(", indexChange: 20 },
+    { pattern: "|\\log_{10}(", indexChange: 10 },
+    { pattern: "|~\\times~", indexChange: 7 },
+    { pattern: "|\\frac{", indexChange: 6},
+    { pattern: "|\\sqrt{" ,indexChange: 6},
+    { pattern: "|\\log(", indexChange: 5 },
+    { pattern: "|\\sin(", indexChange: 5 },
+    { pattern: "|\\cos(", indexChange: 5 },
+    { pattern: "|\\tan(", indexChange: 5 },
+    { pattern: "|\\ln(", indexChange: 4 },
+    { pattern: "|^{", indexChange: 1 },
+    { pattern: "|~}", indexChange: 2 },
+    { pattern: "|}{", indexChange: 2 },
+    { pattern: "|}", indexChange: 1 },
 ];
 
 const PREV_PATTERNS: NavigationPattern[] = [
@@ -84,13 +90,14 @@ const PREV_PATTERNS: NavigationPattern[] = [
     { pattern: "\\operatorname{atan}(", indexChange: 20, cursorChange: 1},
     { pattern: "\\log_{10}(", indexChange: 9, cursorChange: 1},
     { pattern: "~\\times~", indexChange: 7, cursorChange: 1},
-    { pattern: "\\frac{", indexChange: 4, cursorChange: 1},
-    { pattern: "\\sqrt{", indexChange: 4, cursorChange: 1},
-    { pattern: "\\log(", indexChange: 4, cursorChange: 1},
-    { pattern: "\\sin(" ,indexChange: 4, cursorChange: 1},
-    { pattern: "\\cos(", indexChange: 4, cursorChange: 1},
-    { pattern: "\\tan(" ,indexChange: 4, cursorChange: 1},
-    { pattern: "\\ln(", indexChange: 3, cursorChange: 1},
+    { pattern: "\\frac{", indexChange: 6, cursorChange: 1},
+    { pattern: "\\sqrt{", indexChange: 6, cursorChange: 1},
+    { pattern: "\\log(", indexChange: 5, cursorChange: 1},
+    { pattern: "\\sin(" ,indexChange: 5, cursorChange: 1},
+    { pattern: "\\cos(", indexChange: 5, cursorChange: 1},
+    { pattern: "\\tan(" ,indexChange: 5, cursorChange: 1},
+    { pattern: "\\ln(", indexChange: 4, cursorChange: 1},
+    { pattern: "}{", indexChange: 2, cursorChange: 1},
     { pattern: "{", indexChange: 1, cursorChange: 1},
 ]
 
@@ -100,16 +107,15 @@ export const handleNext = (
   dispatch: AppDispatch
 ) => {
     for (const { pattern, indexChange, cursorChange } of NEXT_PATTERNS) {
-        if (matchesAtIndex(inputTex, index, pattern)) {
+        if (matchesAtIndex(inputTex, index, pattern, NavigationOperation.Next)) {
             advanceIndex(dispatch, indexChange, cursorChange);
             return;
         }
     }
 
-    // Special case: matrix nextline or \o{...}
-    if (matchesAtIndex(inputTex, index, '|\\')) {
-        if (matchesAtIndex(inputTex, index, '|\\o')) {
-            const nextBraceIndex = inputTex.indexOf('{', index);
+    if (matchesAtIndex(inputTex, index, "|\\", NavigationOperation.Next)) {
+        if (matchesAtIndex(inputTex, index, "|\\o", NavigationOperation.Next)) {
+            const nextBraceIndex = inputTex.indexOf("{", index);
             if (nextBraceIndex !== -1) {
                 dispatch(incrementIndex(nextBraceIndex - index));
             }
@@ -124,7 +130,7 @@ export const handleNext = (
 
 export const handlePrev = (inputTex: string, index: number, dispatch: AppDispatch) => {
     for (const { pattern, indexChange, cursorChange } of PREV_PATTERNS) {
-        if (matchesAtIndex(inputTex, index, pattern)) {
+        if (matchesAtIndex(inputTex, index, pattern, NavigationOperation.Previous)) {
             rewindIndex(dispatch, indexChange, cursorChange);
             return;
         }
