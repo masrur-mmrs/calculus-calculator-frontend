@@ -12,7 +12,7 @@ export default function Variants() {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const { height } = useDimensions(containerRef)
-    const modes = ["basic", "derivative", "integral"]
+    const modes = ["basic", "derivative", "integral", "matrix"]
 
     return (
         <div>

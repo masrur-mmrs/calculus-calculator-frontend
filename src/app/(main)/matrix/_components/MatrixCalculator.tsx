@@ -32,10 +32,10 @@ const MatrixCalculator: React.FC = () => {
     if (cleanedInputTex[index] === "☐") {
       newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index + 1);
     } else if (cleanedInputTex.substring(index, index + 1) === "|☐") {
-      console.log("+1")
+      // console.log("+1")
       newInputTex = cleanedInputTex.slice(0, index - 1) + "|" + cleanedInputTex.slice(index - 1);
     } else if (cleanedInputTex.substring(index-1, index) === "☐") {
-      console.log("-1")
+      // console.log("-1")
       newInputTex = cleanedInputTex.slice(0, index - 1) + "|" + cleanedInputTex.slice(index);
       dispatch(decrementIndex(1));
     } else {
@@ -43,7 +43,7 @@ const MatrixCalculator: React.FC = () => {
       dispatch(clearErrorMessage());
     }
 
-    console.log("From useEffect: ", index);
+    // console.log("From useEffect: ", index);
     // console.log(cleanedInputTex.substring(index - 1, index))
 
     let inserted = false;
@@ -89,6 +89,7 @@ const MatrixCalculator: React.FC = () => {
       dispatch(incrementIndex(1));
       dispatch(incrementCursorIndex(1));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, dispatch]);
 
 
@@ -97,7 +98,7 @@ const MatrixCalculator: React.FC = () => {
       <h6 className="py-5 font-semibold text-3xl">Matrix</h6>
       <div className="my-4 w-full sm:w-fit">
         <MatrixDisplay/>
-        <MatrixKeyboard/>
+        <MatrixKeyboard inputTex={inputTex}/>
       </div>
     </div>
   );

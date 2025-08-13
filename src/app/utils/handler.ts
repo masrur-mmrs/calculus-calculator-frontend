@@ -24,6 +24,7 @@ enum NavigationOperation {
     Previous,
     Next
 }
+
 interface NavigationPattern {
     pattern: string;
     indexChange: number;
