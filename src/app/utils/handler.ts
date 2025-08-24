@@ -146,7 +146,16 @@ export const handleClear = (dispatch: AppDispatch) => {
 }
 
 export const handleBackSpace = (inputTex: string, index: number, dispatch: AppDispatch) => {
-
+    if (inputTex.substring(index - 13, index) === "\\end{pmatrix}") {
+        const beginIndex = inputTex.lastIndexOf("\\begin{pmatrix}", index - 14);
+        if (beginIndex !== -1) {
+            const newTex = inputTex.substring(0, beginIndex) + inputTex.substring(index);
+            dispatch(setInputTex(newTex));
+            dispatch(setCurrentIndex(beginIndex));
+            dispatch(setCursorIndex(beginIndex));
+            return;
+        }
+    }
     if (inputTex.substring(index - 8, index) === "~\\times~") {
         const newTex = inputTex.substring(0, index - 8) + inputTex.substring(index);
         dispatch(setInputTex(newTex));
@@ -255,6 +264,59 @@ export const handleOnKeyClick = (
         case "=":
             if (fetchResult) fetchResult();
             break;
+        //Matrix cases
+        case "\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}":
+            dispatch(insertTex({index: index, tex: "\\begin{pmatrix}&☐\\\\☐&☐\\end{pmatrix}"}));
+            dispatch(incrementIndex(15));
+            dispatch(incrementCursorIndex(4));
+            break;
+        case "\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}":
+            dispatch(insertTex({index: index, tex: "\\begin{pmatrix}&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}))
+            dispatch(incrementIndex(15));
+            dispatch(incrementCursorIndex(4));
+            break;
+        case "\\begin{pmatrix}☐&☐\\\\☐&☐\\\\☐&☐\\end{pmatrix}":
+            dispatch(insertTex({index: index, tex: "\\begin{pmatrix}&☐\\\\☐&☐\\\\☐&☐\\end{pmatrix}"}))
+            dispatch(incrementIndex(15));
+            dispatch(incrementCursorIndex(4));
+            break;
+        case "\\begin{pmatrix}☐&☐&☐&☐\\\\☐&☐&☐&☐\\end{pmatrix}":
+            dispatch(insertTex({index: index, tex: "\\begin{pmatrix}&☐&☐&☐\\\\☐&☐&☐&☐\\end{pmatrix}"}))
+            dispatch(incrementIndex(15));
+            dispatch(incrementCursorIndex(4));
+            break;
+        case "\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}":
+            dispatch(insertTex({index: index, tex: "\\begin{pmatrix}&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}))
+            dispatch(incrementIndex(15));
+            dispatch(incrementCursorIndex(4));
+            break;
+        case "\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}":
+            dispatch(insertTex({index: index, tex: "\\begin{pmatrix}&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}))
+            dispatch(incrementIndex(15));
+            dispatch(incrementCursorIndex(4));
+            break;
+        case "[~]^{T}":
+            const squaredRegexForTranspose = /[0-9exyzθπ]+/g;
+            const squaredMatchesForTranspose = inputTex.slice(0, index).match(squaredRegexForTranspose);
+            if (squaredMatchesForTranspose) {
+                const lastMatch = squaredMatchesForTranspose[squaredMatchesForTranspose.length - 1];
+                const lastMatchIndex = inputTex.lastIndexOf(lastMatch);
+                if (lastMatchIndex + lastMatch.length === index) {
+                    const newTex = inputTex.slice(0, lastMatchIndex) + inputTex.slice(lastMatchIndex + lastMatch.length);
+                    dispatch(setInputTex(newTex));
+                    dispatch(insertTex({index: lastMatchIndex, tex: `${lastMatch}^{T}`}));
+                    dispatch(setCurrentIndex(lastMatchIndex + `${lastMatch}^{T}`.length + 1));
+                    dispatch(incrementCursorIndex(3));
+                    break;
+                }
+            }
+            if (inputTex.charAt(index-1) === ")" || inputTex.charAt(index-1) === "}" ) {
+                dispatch(insertTex({index: index, tex: "^{T}"}));
+                dispatch(incrementIndex(4));
+                dispatch(incrementCursorIndex(3));
+            }
+            break;
+        //Normal cases
         case "\\frac{[~]}{[~]}":
         case "\\div":
             const regex = /[0-9xyzθ]+/g;

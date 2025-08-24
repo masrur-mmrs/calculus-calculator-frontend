@@ -2,7 +2,7 @@ import React from 'react';
 import Latex from 'react-latex';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
-import { handleOnKeyClick } from './utils/handler';
+import { handleOnKeyClick } from '@/app/utils/handler';
 import { cn } from '@/app/utils/helpers';
 
 interface MatrixKeyboardButtonProps {

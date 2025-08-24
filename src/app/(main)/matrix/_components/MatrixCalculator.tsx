@@ -28,7 +28,6 @@ const MatrixCalculator: React.FC = () => {
     const cleanedInputTex = inputTex.replace("|", "");
     let newInputTex = "";
 
-    // Insert cursor at correct spot
     if (cleanedInputTex[index] === "☐") {
       newInputTex = cleanedInputTex.slice(0, index) + "|" + cleanedInputTex.slice(index + 1);
     } else if (cleanedInputTex.substring(index, index + 1) === "|☐") {
@@ -48,7 +47,6 @@ const MatrixCalculator: React.FC = () => {
 
     let inserted = false;
 
-    // Placeholder detection + insertion
     const emptyFirstElementIndex = newInputTex.indexOf("\\begin{pmatrix}&");
     const emptyMidElementIndex = newInputTex.indexOf("&&");
     const emptyLastElementOfRowIndex = newInputTex.indexOf("&\\");
