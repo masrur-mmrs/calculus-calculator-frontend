@@ -59,11 +59,11 @@ const MatrixKeyboard: React.FC<MatrixKeyboardprops> = ({ inputTex }) => {
             <MatrixKeyboardButton specieal>{"\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}"}</MatrixKeyboardButton>
             <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}^{-1}"}</MatrixKeyboardButton>
             <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}^{T}"}</MatrixKeyboardButton>
-            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton> */}
-            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}1&0&0\\\\0&1&0\\\\0&0&1\\end{pmatrix}"}</MatrixKeyboardButton> */}
-            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{pmatrix}"}</MatrixKeyboardButton> */}
-            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐&☐\\\\☐&☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton> */}
-            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton> */}
+            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton>
+            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}1&0&0\\\\0&1&0\\\\0&0&1\\end{pmatrix}"}</MatrixKeyboardButton>
+            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{pmatrix}"}</MatrixKeyboardButton>
+            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton>
+            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐\\\\☐\\\\☐\\end{pmatrix}"}</MatrixKeyboardButton>
             <MatrixKeyboardButton>1</MatrixKeyboardButton>
             <MatrixKeyboardButton>2</MatrixKeyboardButton>
             <MatrixKeyboardButton>3</MatrixKeyboardButton>
