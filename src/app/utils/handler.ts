@@ -295,7 +295,7 @@ export const handleOnKeyClick = (
             dispatch(incrementIndex(15));
             dispatch(incrementCursorIndex(4));
             break;
-        case "[~]^{T}":
+        case "\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}^{T}":
             const squaredRegexForTranspose = /[0-9exyzθπ]+/g;
             const squaredMatchesForTranspose = inputTex.slice(0, index).match(squaredRegexForTranspose);
             if (squaredMatchesForTranspose) {
@@ -441,6 +441,7 @@ export const handleOnKeyClick = (
                 dispatch(incrementCursorIndex(3));
             }
             break;
+        case "\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}^{-1}":
         case "[~]^{-1}":
             const boxedInverseRegex = /[0-9exyzθπ]+/g;
             const boxedInverseMatches = inputTex.slice(0, index).match(boxedInverseRegex);

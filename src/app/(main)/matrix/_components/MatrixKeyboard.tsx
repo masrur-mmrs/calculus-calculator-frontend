@@ -2,6 +2,9 @@ import React from 'react';
 import katex from 'katex';
 import { useDispatch, useSelector } from 'react-redux';
 import MatrixKeyboardButton from './MatrixKeyboardButton';
+import AddMatrixButton from './AddMatrixButton';
+import SelectRow from './SelectRow';
+import SelectColumn from './SelectColumn';
 import { calculateMatrix } from '@/app/api/calculate';
 import OptionKeys from '@/components/KeyboardComponents/OptionKeys';
 import { setErrorMessage } from '@/redux/slices/errorMessageSlice';
@@ -34,8 +37,9 @@ const MatrixKeyboard: React.FC<MatrixKeyboardprops> = ({ inputTex }) => {
 
         const parseDeterminant = replaceDivision.replaceAll(/\\operatorname\{det\}Matrix\(([\s\S]*?)\)/g, "Matrix($1).det()");
         const parseTranspose = parseDeterminant.replaceAll("^{T}", ".T");
+        const parseInverse = parseTranspose.replaceAll("^{-1}", ".inv()");
 
-        const cleanedInput = parseTranspose.replace("|", "");
+        const cleanedInput = parseInverse.replace("|", "");
 
         const matrixRes = await calculateMatrix(cleanedInput);
         dispatch(setResultTex(matrixRes.result));
@@ -44,18 +48,22 @@ const MatrixKeyboard: React.FC<MatrixKeyboardprops> = ({ inputTex }) => {
 
     return (
         <>
-        <OptionKeys navKeyStyle={"sm:px-13"}><div></div><div></div><div></div></OptionKeys>
-        <div className="grid grid-cols-5 gap-2 mt-1.5">
+        <OptionKeys navKeyStyle={"sm:px-13"}>
+            <AddMatrixButton/>
+            <SelectRow/>
+            <SelectColumn/>
+        </OptionKeys>
+        <div className="grid grid-cols-5 gap-2 mt-2">
             <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}"}</MatrixKeyboardButton>
             <MatrixKeyboardButton specieal>{"\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}"}</MatrixKeyboardButton>
             <MatrixKeyboardButton specieal>{"\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}"}</MatrixKeyboardButton>
-            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton>
-            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐\\\\☐&☐\\\\☐&☐\\end{pmatrix}"}</MatrixKeyboardButton>
-            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton>
-            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}1&0&0\\\\0&1&0\\\\0&0&1\\end{pmatrix}"}</MatrixKeyboardButton>
-            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{pmatrix}"}</MatrixKeyboardButton>
-            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐&☐\\\\☐&☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton>
-            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton>
+            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}^{-1}"}</MatrixKeyboardButton>
+            <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐\\\\☐&☐\\end{pmatrix}^{T}"}</MatrixKeyboardButton>
+            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton> */}
+            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}1&0&0\\\\0&1&0\\\\0&0&1\\end{pmatrix}"}</MatrixKeyboardButton> */}
+            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{pmatrix}"}</MatrixKeyboardButton> */}
+            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐&☐\\\\☐&☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton> */}
+            {/* <MatrixKeyboardButton specieal>{"\\begin{pmatrix}☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\\\☐&☐&☐\\end{pmatrix}"}</MatrixKeyboardButton> */}
             <MatrixKeyboardButton>1</MatrixKeyboardButton>
             <MatrixKeyboardButton>2</MatrixKeyboardButton>
             <MatrixKeyboardButton>3</MatrixKeyboardButton>

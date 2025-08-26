@@ -9,6 +9,8 @@ import boundSlice from "./slices/boundSlice"
 import errorMessageSlice from "./slices/errorMessageSlice"
 import sdSlice from "./slices/sdSlice"
 import stepsResponseSlice from "./slices/stepsResponseSlice"
+import rowSlice from "./slices/rowSlice"
+import columnSlice from "./slices/columnSlice"
 
 export const store = configureStore({
     reducer: { 
@@ -22,6 +24,8 @@ export const store = configureStore({
         errorMessage: errorMessageSlice,
         sd: sdSlice,
         stepsResponse: stepsResponseSlice,
+        row: rowSlice,
+        column: columnSlice
      },
 });
 
