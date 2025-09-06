@@ -11,6 +11,9 @@ import sdSlice from "./slices/sdSlice"
 import stepsResponseSlice from "./slices/stepsResponseSlice"
 import rowSlice from "./slices/rowSlice"
 import columnSlice from "./slices/columnSlice"
+import algebraInputTexReducer from "./slices/algebraSlice"
+import algebraIndexSlice from "./slices/algebraIndexSlice"
+import algebraResultTexSlice from "./slices/algebraResultTexSlice"
 
 export const store = configureStore({
     reducer: { 
@@ -25,7 +28,10 @@ export const store = configureStore({
         sd: sdSlice,
         stepsResponse: stepsResponseSlice,
         row: rowSlice,
-        column: columnSlice
+        column: columnSlice,
+        algebraInputTex: algebraInputTexReducer,
+        algebraIndexSlice: algebraIndexSlice,
+        algebraResultTexSlice: algebraResultTexSlice
      },
 });
 

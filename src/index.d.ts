@@ -9,3 +9,9 @@ declare interface Steps {
     text: string;
     math: string;
 };
+
+declare interface AlgebraInputTex {
+    equation1: string;
+    equation2: string;
+    equation3: string;
+}

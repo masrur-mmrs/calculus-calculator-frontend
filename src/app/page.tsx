@@ -1,10 +1,10 @@
-import React from 'react';
-import DerivativeCalculator from '@/app/(main)/derivative/_components/DerivativeCalculator';
+import React from "react";
+import BasicCalculator from "./(main)/basic/_components/BasicCalculator";
 
 const Home = () => {
   return (
     <>
-      <DerivativeCalculator />
+      <BasicCalculator />
     </>
   );
 }

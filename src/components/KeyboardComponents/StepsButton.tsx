@@ -18,19 +18,17 @@ const StepsButton: React.FC<StepsButtonProps> = ({ getSteps }) => {
     };
 
     return (
-        <div>
-            <button 
-                onClick={handleClick}
-                disabled={inputTex === "|"}
-                className="px-1 m-auto rounded-lg font-bold text-xl text-center h-full w-full font-mono text-wrap 
-                    text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 
-                    sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150
-                    disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed disabled:opacity-60
-                "
-            >
-                <h3>Show<br/>Steps</h3>
-            </button>
-        </div>
+        <button 
+            onClick={handleClick}
+            disabled={inputTex === "|"}
+            className="px-1 m-auto rounded-lg font-bold text-xl text-center h-full w-full font-mono text-wrap 
+                text-white bg-white-mode-light-blue dark:border-muted-teal dark:bg-blue-500 
+                sm:hover:scale-105 active:scale-95 transform ease-in-out duration-150
+                disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed disabled:opacity-60
+            "
+        >
+            <h3>Show<br/>Steps</h3>
+        </button>
     );
 };
 

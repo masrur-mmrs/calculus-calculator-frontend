@@ -35,7 +35,16 @@ const BasicKeyboard: React.FC = ({}) => {
         console.log(eqn)
         const basic = await basicEvaluate(eqn);
         console.log(basic);
-        const result = (sd === "frac") ? basic.result.exact : basic.result.decimal;
+        let result : string;
+        if (sd === "frac") {
+            result =  basic.result.exact;
+        } else {
+            if (typeof(basic.result.decimal) === "object") {
+                result = basic.result.decimal.string;
+            } else {
+                result = basic.result.decimal;
+            }
+        }
         dispatch(setResultTex(result));
     };
 

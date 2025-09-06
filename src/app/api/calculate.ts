@@ -50,3 +50,13 @@ export const calculateMatrix = async (expression: string) => {
 
   return res.json();
 }
+
+export const calculateAlgebra = async (equation1: string, equation2: string, equation3: string) => {
+  const res = await fetch(BACKEND_URL+"/algebra", {
+    method: "POST",
+    headers: { "Content-Type": "application/json"},
+    body: JSON.stringify({ equation1, equation2, equation3 }),
+  });
+
+  return res.json();
+}

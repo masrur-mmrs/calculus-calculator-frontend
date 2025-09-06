@@ -1,10 +1,10 @@
 import Mode from "@/components/Mode"
 
-export default function MainLayout({
+const MainLayout = ({
   children,
 }: {
   children: React.ReactNode
-}) {
+}) => {
   return (
     <html lang="en">
       <body>
@@ -18,3 +18,5 @@ export default function MainLayout({
     </html>
   )
 }
+
+export default MainLayout
